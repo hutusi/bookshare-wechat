@@ -13,13 +13,41 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/index/index'
+      'pages/shelf/index',
+      'pages/explore/index',
+      'pages/dashboard/index'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      list: [
+        {
+          pagePath: "pages/shelf/index",
+          text: "书架",
+          iconPath: "./assets/icons/tab_shelf.png",
+          selectedIconPath: "./assets/icons/tab_shelf_s.png"
+        },
+        {
+          pagePath: "pages/explore/index",
+          text: "浏览",
+          iconPath: "./assets/icons/tab_library.png",
+          selectedIconPath: "./assets/icons/tab_library_s.png"
+        },
+        {
+          pagePath: "pages/dashboard/index",
+          text: "我",
+          iconPath: "./assets/icons/tab_user.png",
+          selectedIconPath: "./assets/icons/tab_user_s.png"
+        }
+      ],
+      color: "#a6a6a6",
+      selectedColor: "#78a4fa",
+      backgroundColor: "#ffffff",
+      borderStyle: "black"
     }
   }
 
