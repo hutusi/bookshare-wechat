@@ -4,7 +4,7 @@ import { View, Text } from '@tarojs/components'
 export default class Shelf extends Component {
 
   config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '书架'
   }
 
   componentWillMount () { }
