@@ -1,0 +1,6 @@
+@import "~taro-ui/dist/style/index.scss";
+@import "../../styles/variables.scss";
+
+.my-network-error {
+  @include absolute-center;
+}
