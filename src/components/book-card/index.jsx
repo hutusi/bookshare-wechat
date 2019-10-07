@@ -1,7 +1,9 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Navigator, Image, Text } from "@tarojs/components";
 import PropTypes from "prop-types";
+
 import URL from "../../constants/urls";
+import "./index.scss";
 
 export default class BookCard extends Component {
   static options = {
@@ -19,7 +21,7 @@ export default class BookCard extends Component {
       id: PropTypes.number.isRequired,
       title: PropTypes.string,
       author: PropTypes.string,
-      image: PropTypes.url
+      cover: PropTypes.string
     }),
     showArrow: PropTypes.bool,
     onLongPress: PropTypes.func
@@ -36,24 +38,19 @@ export default class BookCard extends Component {
         className='at-row at-row__align--start my-book-card'
         hoverClass='None'
         url={`${URL.BOOK_DETAIL}?id=${data.id}`}
-        onLongPress={this.onLongPress}
       >
         <Image
           className='at-col at-col--auto my-book-card__img'
           style={{ marginRight: Taro.pxTransform(24) }}
-          src={data.image}
+          src={data.book.cover}
           mode='aspectFill'
         />
         <View className='at-col my-book-card__info'>
-          <View className='my-book-card__info-title'>{data.title}</View>
-          <View>
-            评分：<Text class='color-warning'>{data.score}</Text>（
-            {data.review_num}条评论）
-          </View>
-          <View>作者：{data.author}</View>
-          <View>出版社：{data.publisher}</View>
-          <View>出版日期：{data.pubdate}</View>
-          <View>ISBN：{data.isbn}</View>
+          <View className='my-book-card__info-title'>{data.book.title}</View>
+          <View>作者：{data.book.author}</View>
+          <View>出版社：{data.book.publisher}</View>
+          <View>出版日期：{data.book.pubdate}</View>
+          <View>ISBN：{data.book.isbn}</View>
         </View>
         {showArrow && (
           <Text

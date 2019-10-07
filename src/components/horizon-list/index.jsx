@@ -58,15 +58,15 @@ export default class HorizonList extends Component {
                       ? Taro.pxTransform(imgHeight)
                       : Taro.pxTransform(imgWidth)
                   }}
-                  src={item.image}
+                  src={item.book.cover}
                   mode='aspectFill'
                 />
                 <View className='my-horizon-list-item__title'>
-                  {item.title}
+                  {item.book.title}
                 </View>
                 {isBook && (
                   <View className='my-horizon-list-item__author'>
-                    {item.author}
+                    {item.book.author}
                   </View>
                 )}
               </Navigator>

@@ -9,14 +9,23 @@ import URL from "../../constants/urls";
 export default class Shelf extends Component {
 
   state = {
-    books: []
+    sharedBooks: [],
+    lentBooks: [],
+    borrowedBooks: [],
+    receivedBooks: [],
+    personalBooks: []
   }
 
   componentWillMount () {
-    API.get('/books')
-       .then(res =>
-            this.setState({books: res.data})
-            )
+    API.get('/shelfs/summary?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+       .then(res => {
+          console.log(res.data)
+          this.setState({sharedBooks: res.data['shared']})
+          this.setState({lentBooks: res.data['lent']})
+          this.setState({borrowedBooks: res.data['borrowed']})
+          this.setState({receivedBooks: res.data['received']})
+          this.setState({personalBooks: res.data['personal']})
+       })
   }
 
   componentDidMount () { 
@@ -35,13 +44,39 @@ export default class Shelf extends Component {
   render () {
     return (
       <View className='shelf'>
+
         <Panel
-          url={`${URL.BOOK_LIST}?type=new`}
-          title='新书速递'
+          url={`${URL.BOOK_LIST}?type=sharedBooks`}
+          title='我的分享'
           className='panel--first'
         >
-          <HorizonList data={this.state.books} />
+          <HorizonList data={this.state.sharedBooks} />
         </Panel>
+
+        <Panel
+          url={`${URL.BOOK_LIST}?type=lentBooks`}
+          title='我的借出'
+          className='panel--first'
+        >
+          <HorizonList data={this.state.lentBooks} />
+        </Panel>
+
+        <Panel
+          url={`${URL.BOOK_LIST}?type=borrowedBooks`}
+          title='我的借入'
+          className='panel--first'
+        >
+          <HorizonList data={this.state.borrowedBooks} />
+        </Panel>
+
+        <Panel
+          url={`${URL.BOOK_LIST}?type=personalBooks`}
+          title='我的藏书'
+          className='panel--first'
+        >
+          <HorizonList data={this.state.personalBooks} />
+        </Panel>
+
       </View>
     )
   }
