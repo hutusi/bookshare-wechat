@@ -18,8 +18,10 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"bundle": true
 	},
 	"compileType": "miniprogram",
+	"libVersion": "2.8.3",
 	"condition": {}
 }
