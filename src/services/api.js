@@ -3,11 +3,16 @@ import BASE_URL from "./config";
 
 export default {
   baseOptions(params, method = "GET") {
+    const user_id = Taro.getStorageSync('user_id')
+    const api_token = Taro.getStorageSync('api_token')
+
     let { url, data } = params;
     let contentType = "application/json";
     contentType = params.contentType || contentType;
+    let urlStr = url.indexOf("http") !== -1 ? url : BASE_URL + url;
+    urlStr +='?user_id=' + user_id + '&api_token=' + api_token
     const option = {
-      url: url.indexOf("http") !== -1 ? url : BASE_URL + url,
+      url: urlStr,
       data: data,
       method: method,
       header: {

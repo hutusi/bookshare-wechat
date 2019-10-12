@@ -17,15 +17,32 @@ export default class Shelf extends Component {
   }
 
   componentWillMount () {
-    API.get('/shelfs/summary?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
-       .then(res => {
-          console.log(res.data)
-          this.setState({sharedBooks: res.data['shared']})
-          this.setState({lentBooks: res.data['lent']})
-          this.setState({borrowedBooks: res.data['borrowed']})
-          this.setState({receivedBooks: res.data['received']})
-          this.setState({personalBooks: res.data['personal']})
-       })
+
+    const user_id = Taro.getStorageSync('user_id')
+    const api_token = Taro.getStorageSync('api_token')
+
+    if (!(user_id && api_token)) {
+      (async() => {
+        try {
+            const result = await Taro.login();
+            const response = API.post('/sessions/wechat', {js_code: result.code});
+            Taro.setStorageSync('user_id', response.data['user_id']);
+            Taro.setStorageSync('api_token', response.data['api_token']);
+        } catch (err) {
+            console.log("login failed: " + err);
+        }
+      })();
+    }
+    
+    API.get('/shelfs/summary')
+      .then(res => {
+        console.log(res.data)
+        this.setState({sharedBooks: res.data['shared']})
+        this.setState({lentBooks: res.data['lent']})
+        this.setState({borrowedBooks: res.data['borrowed']})
+        this.setState({receivedBooks: res.data['received']})
+        this.setState({personalBooks: res.data['personal']})
+      })
   }
 
   componentDidMount () { 
