@@ -41,7 +41,7 @@ export default class Explore extends Component {
   componentDidHide () { }
 
   config = {
-    navigationBarTitleText: '浏览'
+    navigationBarTitleText: '发现'
   }
 
   handleClick (value) {

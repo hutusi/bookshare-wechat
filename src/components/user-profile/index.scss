@@ -1,0 +1,23 @@
+@import "~taro-ui/dist/style/index.scss";
+@import "../../styles/variables.scss";
+
+.user-profile {
+  box-sizing: border-box;
+  padding: $spacing-v-lg $spacing-h-lg;
+  background: $color-white;
+  @include active;
+  @include hairline-top-bottom();
+  &__avatar {
+    flex: 0 0 $user-avatar-width;
+  }
+  &__info {
+    font-size: $font-size-base;
+    line-height: 1.7em;
+    color: $color-grey-1;
+    &-name {
+      font-size: $font-size-lg;
+      line-height: 2em;
+      color: $color-text-base;
+    }
+  }
+}

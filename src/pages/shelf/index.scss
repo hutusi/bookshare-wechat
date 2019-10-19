@@ -1,3 +1,5 @@
+@import "~taro-ui/dist/style/index.scss";
+@import "~taro-ui/dist/style/components/flex.scss";
 @import "../../styles/variables.scss";
 
 page {
@@ -12,4 +14,8 @@ page {
   &:after {
     border-bottom-width: 0 !important;
   }
+}
+
+.at-button {
+  margin: $spacing-h-sm;
 }

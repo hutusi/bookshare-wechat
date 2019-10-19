@@ -1,10 +1,16 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
+import { AtButton } from 'taro-ui'
 
 import API from '../../services/api';
+import REST from '../../services/rest';
+import user from '../../services/user';
 import Panel from '../../components/panel';
 import HorizonList from '../../components/horizon-list';
 import URL from "../../constants/urls";
+import UserProfile from '../../components/user-profile';
+
+import './index.scss'
 
 export default class Shelf extends Component {
 
@@ -17,22 +23,9 @@ export default class Shelf extends Component {
   }
 
   componentWillMount () {
+    user.login();
 
-    const user_id = Taro.getStorageSync('user_id')
-    const api_token = Taro.getStorageSync('api_token')
-
-    if (!(user_id && api_token)) {
-      (async() => {
-        try {
-            const result = await Taro.login();
-            const response = API.post('/sessions/wechat', {js_code: result.code});
-            Taro.setStorageSync('user_id', response.data['user_id']);
-            Taro.setStorageSync('api_token', response.data['api_token']);
-        } catch (err) {
-            console.log("login failed: " + err);
-        }
-      })();
-    }
+    console.log(user);
     
     API.get('/shelfs/summary')
       .then(res => {
@@ -58,41 +51,91 @@ export default class Shelf extends Component {
     navigationBarTitleText: '书架'
   }
 
+  onAddBook = (e) => {
+    e.stopPropagation();
+
+    Taro.scanCode({scanType: ['barCode']})
+      .then(res => {
+        console.log(res.result);
+        API.get('/books/isbn/' + res.result)
+          .then(api_res => {
+            console.log(api_res);
+            // if(api_res.statusCode == 404) {
+            //   const douban_url = 'https://douban.uieee.com/v2/book/isbn/' + res.result;
+            //   REST.get(douban_url)
+            //     .then(douban_res => {
+            //       console.log(douban_res);
+            //     });
+            // }
+          })
+          .catch(api_err => console.log(api_err));
+
+        // (async() => {
+        //   try {
+        //       console.log(res.result);
+        //       const api_res = await API.get('/books/isbn/' + res.result);
+        //       console.log(api_res);
+        //       if(api_res.status == 404) {
+        //         // const douban_url = 'https://douban.uieee.com/v2/book/isbn/' + res.result;
+        //         // const douban_res = await REST.get(douban_url);
+        //         // console.log(douban_res);
+        //       }
+    
+        //   } catch (err) {
+        //       console.log("login failed: " + err);
+        //   }
+        // })();
+      })
+      .catch(err => console.log(err));
+  }
+
   render () {
     return (
       <View className='shelf'>
 
-        <Panel
-          url={`${URL.BOOK_LIST}?type=sharedBooks`}
-          title='我的分享'
-          className='panel--first'
-        >
-          <HorizonList data={this.state.sharedBooks} />
-        </Panel>
+        <UserProfile userInfo={user.getInfo()} />
 
-        <Panel
-          url={`${URL.BOOK_LIST}?type=lentBooks`}
-          title='我的借出'
-          className='panel--first'
-        >
-          <HorizonList data={this.state.lentBooks} />
-        </Panel>
+        {this.state.sharedBooks.length > 0 &&
+          <Panel
+            url={`${URL.BOOK_LIST}?type=sharedBooks`}
+            title='我的分享'
+            className='panel--first'
+          >
+            <HorizonList data={this.state.sharedBooks} />
+          </Panel>
+        }
 
-        <Panel
-          url={`${URL.BOOK_LIST}?type=borrowedBooks`}
-          title='我的借入'
-          className='panel--first'
-        >
-          <HorizonList data={this.state.borrowedBooks} />
-        </Panel>
+        {this.state.lentBooks.length > 0 &&
+          <Panel
+            url={`${URL.BOOK_LIST}?type=lentBooks`}
+            title='我的借出'
+            className='panel--first'
+          >
+            <HorizonList data={this.state.lentBooks} />
+          </Panel>
+        }
 
-        <Panel
-          url={`${URL.BOOK_LIST}?type=personalBooks`}
-          title='我的藏书'
-          className='panel--first'
-        >
-          <HorizonList data={this.state.personalBooks} />
-        </Panel>
+        {this.state.borrowedBooks.length > 0 &&
+          <Panel
+            url={`${URL.BOOK_LIST}?type=borrowedBooks`}
+            title='我的借入'
+            className='panel--first'
+          >
+            <HorizonList data={this.state.borrowedBooks} />
+          </Panel>
+        }
+
+        {this.state.personalBooks.length > 0 &&
+          <Panel
+            url={`${URL.BOOK_LIST}?type=personalBooks`}
+            title='我的藏书'
+            className='panel--first'
+          >
+            <HorizonList data={this.state.personalBooks} />
+          </Panel>
+        }
+
+        <AtButton type='primary' onClick={this.onAddBook}>添加藏书</AtButton>
 
       </View>
     )
