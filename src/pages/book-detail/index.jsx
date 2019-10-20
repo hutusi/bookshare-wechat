@@ -1,6 +1,7 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Image, Text, Block } from "@tarojs/components";
 import { AtActivityIndicator } from "taro-ui";
+import moment from 'moment';
 
 import API from '../../services/api';
 import NetworkError from "../../components/network-error";
@@ -83,9 +84,9 @@ export default class BookDetail extends Component {
             <View className='at-row at-row__align--start book'>
               <View className='at-col book__info'>
                 <View className='book__info-title'>{book.book.title}</View>
-                <View>作者：{book.book.author}</View>
-                <View>出版社：{book.book.publisher}</View>
-                <View>出版日期：{book.book.pubdate}</View>
+                <View>作者：{book.book.author_name}</View>
+                <View>出版社：{book.book.publisher_name}</View>
+                <View>出版日期：{moment(book.book.pubdate).format('YYYY-MM-DD')}</View>
                 <View>ISBN：{book.book.isbn}</View>
               </View>
               <Image
@@ -98,7 +99,7 @@ export default class BookDetail extends Component {
             <View className='book-introduction'>
               <View className='book-introduction__title'>简介与目录</View>
               <View className='book-introduction__content'>
-                {book.book.intro}
+                {book.book.summary}
               </View>
             </View>
             <View className='related-books'>

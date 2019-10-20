@@ -1,16 +1,17 @@
 import Taro from "@tarojs/taro";
 import BASE_URL from "./config";
+import user from './user';
 
 export default {
   baseOptions(params, method = "GET") {
-    const user_id = Taro.getStorageSync('user_id')
-    const api_token = Taro.getStorageSync('api_token')
+    const userId = user.userId;
+    const apiToken = user.apiToken;
 
     let { url, data } = params;
     let contentType = "application/json";
     contentType = params.contentType || contentType;
     let urlStr = BASE_URL + url;
-    urlStr +='?user_id=' + user_id + '&api_token=' + api_token
+    urlStr +='?user_id=' + userId + '&api_token=' + apiToken
     const option = {
       url: urlStr,
       data: data,

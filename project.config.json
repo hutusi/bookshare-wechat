@@ -2,10 +2,11 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "bookshare-wechat",
 	"description": "bookshare app",
-	"appid": "touristappid",
+	"appid": "wx3ccb2b8e591f3441",
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
+		"enhance": true,
 		"postcss": false,
 		"minified": false,
 		"newFeature": true,

@@ -23,7 +23,8 @@ export default class Shelf extends Component {
   }
 
   componentWillMount () {
-    user.login();
+    
+    // user.login();
 
     console.log(user);
     
@@ -93,7 +94,7 @@ export default class Shelf extends Component {
     return (
       <View className='shelf'>
 
-        <UserProfile userInfo={user.getInfo()} />
+        <UserProfile />
 
         {this.state.sharedBooks.length > 0 &&
           <Panel

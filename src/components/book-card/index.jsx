@@ -1,6 +1,7 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Navigator, Image, Text } from "@tarojs/components";
 import PropTypes from "prop-types";
+import moment from 'moment';
 
 import URL from "../../constants/urls";
 import "./index.scss";
@@ -20,7 +21,7 @@ export default class BookCard extends Component {
     data: PropTypes.shape({
       id: PropTypes.number.isRequired,
       title: PropTypes.string,
-      author: PropTypes.string,
+      author_name: PropTypes.string,
       cover: PropTypes.string
     }),
     showArrow: PropTypes.bool,
@@ -47,9 +48,9 @@ export default class BookCard extends Component {
         />
         <View className='at-col my-book-card__info'>
           <View className='my-book-card__info-title'>{data.book.title}</View>
-          <View>作者：{data.book.author}</View>
-          <View>出版社：{data.book.publisher}</View>
-          <View>出版日期：{data.book.pubdate}</View>
+          <View>作者：{data.book.author_name}</View>
+          <View>出版社：{data.book.publisher_name}</View>
+          <View>出版日期：{moment(data.book.pubdate).format('YYYY-MM-DD')}</View>
           <View>ISBN：{data.book.isbn}</View>
         </View>
         {showArrow && (
