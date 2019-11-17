@@ -47,18 +47,12 @@ class User {
   //   }
   // }
 
-  // fetchInfo() {
-  //   let userId = this.userId;
-  //   return new Promise(function (resolve, reject) {
-  //     API.get('/users/' + userId
-  //       ).then(result => {
-  //         let userInfo = result.data;
-  //         console.log('fetchInfo:');
-  //         console.log(userInfo);
-  //         resolve(userInfo);
-  //       }).catch(err => reject(err));
-  //     });
-  // }
+  fetchInfo() {
+    return API.get('/users/' + this.userId
+        ).then(result => {
+          this.userInfo = result.data;
+        }).catch(err => console.log(err));
+  }
 
   isLoggedIn() {
     return (this.userId && this.apiToken);

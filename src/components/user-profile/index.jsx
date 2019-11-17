@@ -26,14 +26,13 @@ export default class UserProfile extends Component {
   }
 
   componentWillMount () {
-    // user.fetchInfo().then(userInfo => {
-    //   console.log('fetchInfo--->:');
-    //   console.log(userInfo);
-    //   this.setState({
-    //     userInfo: userInfo,
-    //     loggedIn: user.isLoggedIn()
-    //   });
-    // }); 
+    user.fetchInfo().then(res => {
+      // console.log(user.getInfo());
+      this.setState({
+        userInfo: user.getInfo(),
+        loggedIn: user.isLoggedIn()
+      });
+    }); 
   }
 
   onLogging() {

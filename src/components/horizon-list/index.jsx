@@ -27,7 +27,7 @@ export default class HorizonList extends Component {
 
   render() {
     const { isBook, data, sideSpace } = this.props;
-    const url = isBook ? URL.BOOK_DETAIL : URL.BOOK_LIST_DETAIL;
+    const url = isBook ? URL.PRINT_BOOK_DETAIL : URL.PRINT_BOOK_LIST_DETAIL;
 
     // 以rpx为单位计算图片宽高
     let imgWidth, imgHeight;

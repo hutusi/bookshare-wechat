@@ -17,8 +17,8 @@ class App extends Component {
       'pages/explore/index',
       'pages/dashboard/index',
 
-      'pages/book-list/index',
-      'pages/book-detail/index'
+      'pages/printbook-list/index',
+      'pages/printbook-detail/index'
     ],
     window: {
       backgroundTextStyle: 'light',

@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 
 import API from '../../services/api';
-import BookCard from "../../components/book-card";
+import PrintBookCard from "../../components/printbook-card";
 
 import "./index.scss";
 
@@ -60,12 +60,12 @@ export default class Explore extends Component {
         <AtTabs className='at-tabs' current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
           <AtTabsPane current={this.state.current} index={0} >
             {shared_books.map(item => (
-              <BookCard data={item} key={item.id} />
+              <PrintBookCard data={item} key={item.id} />
             ))}
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
             {borrowable_books.map(item => (
-              <BookCard data={item} key={item.id} />
+              <PrintBookCard data={item} key={item.id} />
             ))}
           </AtTabsPane>
         </AtTabs>

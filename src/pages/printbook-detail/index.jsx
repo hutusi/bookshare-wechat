@@ -9,7 +9,7 @@ import HorizonList from "../../components/horizon-list";
 
 import "./index.scss";
 
-export default class BookDetail extends Component {
+export default class PrintBookDetail extends Component {
 
   constructor() {
     super(...arguments);
@@ -88,6 +88,7 @@ export default class BookDetail extends Component {
                 <View>出版社：{book.book.publisher_name}</View>
                 <View>出版日期：{moment(book.book.pubdate).format('YYYY-MM-DD')}</View>
                 <View>ISBN：{book.book.isbn}</View>
+                <View>状态：{book.status}</View>
               </View>
               <Image
                 className='at-col at-col--auto book__img'

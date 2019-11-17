@@ -3,11 +3,11 @@ import { View } from "@tarojs/components";
 import { AtMessage, AtNoticebar } from "taro-ui";
 
 import API from '../../services/api';
-import BookCard from "../../components/book-card";
+import PrintBookCard from "../../components/printbook-card";
 
 import "./index.scss";
 
-export default class BookList extends Component {
+export default class PrintBookList extends Component {
 
   constructor() {
     super(...arguments);
@@ -66,7 +66,7 @@ export default class BookList extends Component {
       <View>
         <AtMessage />
         {data.map(item => (
-          <BookCard data={item} key={item.id} />
+          <PrintBookCard data={item} key={item.id} />
         ))}
       </View>
     );

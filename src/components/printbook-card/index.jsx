@@ -6,7 +6,7 @@ import moment from 'moment';
 import URL from "../../constants/urls";
 import "./index.scss";
 
-export default class BookCard extends Component {
+export default class PrintBookCard extends Component {
   static options = {
     addGlobalClass: true
   };
@@ -38,7 +38,7 @@ export default class BookCard extends Component {
       <Navigator
         className='at-row at-row__align--start my-book-card'
         hoverClass='None'
-        url={`${URL.BOOK_DETAIL}?id=${data.id}`}
+        url={`${URL.PRINT_BOOK_DETAIL}?id=${data.id}`}
       >
         <Image
           className='at-col at-col--auto my-book-card__img'
@@ -52,6 +52,7 @@ export default class BookCard extends Component {
           <View>出版社：{data.book.publisher_name}</View>
           <View>出版日期：{moment(data.book.pubdate).format('YYYY-MM-DD')}</View>
           <View>ISBN：{data.book.isbn}</View>
+          <View>状态：{data.status}</View>
         </View>
         {showArrow && (
           <Text

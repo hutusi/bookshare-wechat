@@ -98,7 +98,7 @@ export default class Shelf extends Component {
 
         {this.state.sharedBooks.length > 0 &&
           <Panel
-            url={`${URL.BOOK_LIST}?type=sharedBooks`}
+            url={`${URL.PRINT_BOOK_LIST}?type=sharedBooks`}
             title='我的分享'
             className='panel--first'
           >
@@ -108,7 +108,7 @@ export default class Shelf extends Component {
 
         {this.state.lentBooks.length > 0 &&
           <Panel
-            url={`${URL.BOOK_LIST}?type=lentBooks`}
+            url={`${URL.PRINT_BOOK_LIST}?type=lentBooks`}
             title='我的借出'
             className='panel--first'
           >
@@ -118,7 +118,7 @@ export default class Shelf extends Component {
 
         {this.state.borrowedBooks.length > 0 &&
           <Panel
-            url={`${URL.BOOK_LIST}?type=borrowedBooks`}
+            url={`${URL.PRINT_BOOK_LIST}?type=borrowedBooks`}
             title='我的借入'
             className='panel--first'
           >
@@ -128,7 +128,7 @@ export default class Shelf extends Component {
 
         {this.state.personalBooks.length > 0 &&
           <Panel
-            url={`${URL.BOOK_LIST}?type=personalBooks`}
+            url={`${URL.PRINT_BOOK_LIST}?type=personalBooks`}
             title='我的藏书'
             className='panel--first'
           >
