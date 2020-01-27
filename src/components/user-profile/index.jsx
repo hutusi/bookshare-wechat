@@ -26,22 +26,28 @@ export default class UserProfile extends Component {
   }
 
   componentWillMount () {
-    user.fetchInfo().then(res => {
-      // console.log(user.getInfo());
-      this.setState({
-        userInfo: user.getInfo(),
-        loggedIn: user.isLoggedIn()
-      });
-    }); 
+    this.tryLogin();
   }
 
-  onLogging() {
-    user.login();
-
+  setLoginInfo() {
     this.setState({
       userInfo: user.getInfo(),
       loggedIn: user.isLoggedIn()
     });
+  }
+
+  tryLogin() {
+    user.login(this.setLoginInfo);
+    // try {
+    //   // Taro.checkSession();
+
+    // } catch(e) {
+
+    // }
+  }
+
+  onLogging() {
+    this.tryLogin();
   }
 
   render() {
