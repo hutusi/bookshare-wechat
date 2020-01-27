@@ -12,6 +12,7 @@
 		"newFeature": true,
 		"coverView": true,
 		"autoAudits": false,
+		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -21,7 +22,7 @@
 			"outputPath": ""
 		},
 		"bundle": true,
-		"uglifyFileName": false
+		"nodeModules": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.10.1",
