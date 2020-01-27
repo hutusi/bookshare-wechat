@@ -5,8 +5,8 @@ let instance = null;
 
 class User {
   constructor() {
-    Taro.removeStorageSync('user_id');
-    Taro.removeStorageSync('api_token');
+    // Taro.removeStorageSync('user_id');
+    // Taro.removeStorageSync('api_token');
     this.userId = Taro.getStorageSync('user_id');
     this.apiToken = Taro.getStorageSync('api_token');
     this.userInfo = {'nickname': 'John Doe'};
@@ -19,20 +19,36 @@ class User {
     return instance;
   }
 
-  login(cb) {
-    Taro.login().then(result => {
-      console.log(result)
-      API.post('/sessions/wechat', {js_code: result.code}).then(response => {
-        // console.log(response)
-        this.saveStrorage(response.data['user_id'], response.data['api_token']);
+  login() {
+    let that = this;
+    const promise = new Promise(function(resolve, reject) {
+      if (!(that.userId && that.apiToken)) {
+        Taro.login().then(result => {
+          // console.log(result)
+          API.post('/sessions/wechat', {js_code: result.code}).then(response => {
+            that.saveStrorage(response.data['user_id'], response.data['api_token']);
+            that.updateUserInfo().then(infoRes => {
+              resolve(infoRes);
+            }).catch(infoError => {
+              reject(infoError);
+            });
+          }).catch(api_err => {
+            console.error(api_err);
+            reject(api_err);
+          });
+        }).catch(err => {
+          console.error(err);
+          reject(err);
+        });
+      } else {
+        that.fetchInfo().then(result => {
+          resolve(result);
+        });
+      }
 
-        this.updateUserInfo(cb);
-      }).catch(api_err => {
-        console.error(api_err)
-      });
-    }).catch(err => {
-      console.error(err);
     });
+
+    return promise;
   }
 
   saveStrorage(user_id, api_token) {
@@ -42,20 +58,26 @@ class User {
     Taro.setStorageSync('api_token', this.apiToken);
   }
 
-  updateUserInfo(cb) {
-    Taro.getUserInfo().then(result => {
-      this.userInfo = result.userInfo;
-      API.put('/users/' + this.userId, { nickname: this.userInfo.nickName,
-        avatar: this.userInfo.avatarUrl, gender: this.userInfo.gender, 
-        country: this.userInfo.country, province: this.userInfo.province,
-        city: this.userInfo.city, language: this.userInfo.language}).then(() => {
-          cb();
-      }).catch(api_err =>{
-        console.error(api_err);
+  updateUserInfo() {
+    let that = this;
+    const promise = new Promise(function(resolve, reject) {
+      Taro.getUserInfo().then(result => {
+        that.userInfo = result.userInfo;
+        API.put('/users/' + that.userId, { nickname: that.userInfo.nickName,
+          avatar: that.userInfo.avatarUrl, gender: that.userInfo.gender, 
+          country: that.userInfo.country, province: that.userInfo.province,
+          city: that.userInfo.city, language: that.userInfo.language}).then(res => {
+            resolve(that.userInfo);
+        }).catch(api_err => {
+          console.error(api_err);
+          reject(api_err);
+        });
+      }).catch(err => {
+        console.error(err);
+        reject(err);
       });
-    }).catch(err => {
-      console.error(err);
     });
+    return promise;
   }
 
   // async login() {
@@ -87,10 +109,19 @@ class User {
   // }
 
   fetchInfo() {
-    return API.get('/users/' + this.userId
+    let that = this;
+    const promise = new Promise(function(resolve, reject) {
+      API.get('/users/' + that.userId
         ).then(result => {
-          this.userInfo = result.data;
-        }).catch(err => console.log(err));
+          that.userInfo = result.data;
+          console.log(that.userInfo)
+          resolve(that.userInfo);
+        }).catch(err => {
+          console.error(err);
+          reject(err);
+        });
+    });
+    return promise;
   }
 
   isLoggedIn() {

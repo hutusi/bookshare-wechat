@@ -29,15 +29,24 @@ export default class UserProfile extends Component {
     this.tryLogin();
   }
 
-  setLoginInfo() {
-    this.setState({
-      userInfo: user.getInfo(),
-      loggedIn: user.isLoggedIn()
-    });
-  }
+  // setLoginInfo() {
+  //   this.setState({
+  //     userInfo: user.getInfo(),
+  //     loggedIn: user.isLoggedIn()
+  //   });
+  // }
 
   tryLogin() {
-    user.login(this.setLoginInfo);
+    let that = this;
+    user.login().then(result => {
+      // console.log(result)
+      that.setState({
+        userInfo: user.getInfo(),
+        loggedIn: user.isLoggedIn()
+      });
+    }).catch(error => {
+      console.error(error);
+    });
     // try {
     //   // Taro.checkSession();
 
@@ -58,7 +67,6 @@ export default class UserProfile extends Component {
           <View
             className='at-row at-row__align--start user-profile'
             hoverClass='None'
-            onClick={this.onLogging}
           >
             <View className='at-col user-profile__avatar'>
               <AtAvatar circle size='normal' image={userInfo['avatar']}></AtAvatar>
@@ -71,6 +79,7 @@ export default class UserProfile extends Component {
           <View
             className='at-row at-row__align--start user-profile'
             hoverClass='None'
+            onClick={this.onLogging}
           >
             <View className='at-col user-profile__avatar'>
               <AtAvatar circle size='normal' text='书'></AtAvatar>
