@@ -9,7 +9,7 @@ import HorizonList from "../../components/horizon-list";
 
 import "./index.scss";
 
-export default class PrintBookDetail extends Component {
+export default class BookDetail extends Component {
 
   constructor() {
     super(...arguments);
@@ -41,7 +41,7 @@ export default class PrintBookDetail extends Component {
 
   loadBook() {
     let book_id = this.$router.params.id
-    API.get(`/print_books/${book_id}`)
+    API.get(`/books/${book_id}`)
            .then(res => {
               console.log(res.data)
               this.setState({
@@ -83,16 +83,15 @@ export default class PrintBookDetail extends Component {
           <Block>
             <View className='at-row at-row__align--start book'>
               <View className='at-col book__info'>
-                <View className='book__info-title'>{book.book.title}</View>
-                <View>作者：{book.book.author_name}</View>
-                <View>出版社：{book.book.publisher_name}</View>
-                <View>出版日期：{moment(book.book.pubdate).format('YYYY-MM-DD')}</View>
-                <View>ISBN：{book.book.isbn}</View>
-                <View>状态：{book.status}</View>
+                <View className='book__info-title'>{book.title}</View>
+                <View>作者：{book.author_name}</View>
+                <View>出版社：{book.publisher_name}</View>
+                <View>出版日期：{moment(book.pubdate).format('YYYY-MM-DD')}</View>
+                <View>ISBN：{book.isbn}</View>
               </View>
               <Image
                 className='at-col at-col--auto book__img'
-                src={book.book.cover}
+                src={book.cover}
                 mode='widthFix'
                 onClick={this.onPreview}
               />
@@ -100,7 +99,7 @@ export default class PrintBookDetail extends Component {
             <View className='book-introduction'>
               <View className='book-introduction__title'>简介与目录</View>
               <View className='book-introduction__content'>
-                {book.book.summary}
+                {book.summary}
               </View>
             </View>
             <View className='related-books'>

@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+import { AtButton, AtMessage } from 'taro-ui'
 
 import API from '../../services/api';
 import REST from '../../services/rest';
@@ -52,6 +52,13 @@ export default class Shelf extends Component {
     navigationBarTitleText: '书架'
   }
 
+  notFoundBook () {
+    Taro.atMessage({
+      'message': '未获取到图书信息!',
+      'type': 'warning',
+    })
+  }
+
   onAddBook = (e) => {
     e.stopPropagation();
 
@@ -60,7 +67,7 @@ export default class Shelf extends Component {
         console.log(res.result);
         API.get('/books/isbn/' + res.result)
           .then(api_res => {
-            console.log(api_res);
+            console.log(api_res.data);
             // if(api_res.statusCode == 404) {
             //   const douban_url = 'https://douban.uieee.com/v2/book/isbn/' + res.result;
             //   REST.get(douban_url)
@@ -68,8 +75,13 @@ export default class Shelf extends Component {
             //       console.log(douban_res);
             //     });
             // }
+            let book_id = api_res.data['id'];
+            Taro.navigateTo({'url': `${URL.BOOK_DETAIL}?id=${book_id}`});
           })
-          .catch(api_err => console.log(api_err));
+          .catch(api_err => {
+            console.error(api_err);
+            this.notFoundBook();
+          });
 
         // (async() => {
         //   try {
@@ -93,6 +105,8 @@ export default class Shelf extends Component {
   render () {
     return (
       <View className='shelf'>
+
+        <AtMessage />
 
         <UserProfile />
 

@@ -19,7 +19,7 @@ export default class PrintBookList extends Component {
     switch (type) {
       case "sharedBooks": {
         Taro.setNavigationBarTitle({ title: "我的分享" })
-        API.get('/shelfs/shared?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+        API.get('/shelfs/shared')
            .then(res => {
               // console.log(res.data)
               this.setState({print_books: res.data['print_books']})
@@ -28,7 +28,7 @@ export default class PrintBookList extends Component {
       }
       case "lentBooks": {
         Taro.setNavigationBarTitle({ title: "我的借出" })
-        API.get('/shelfs/lent?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+        API.get('/shelfs/lent')
            .then(res => {
               // console.log(res.data)
               this.setState({print_books: res.data['print_books']})
@@ -37,7 +37,7 @@ export default class PrintBookList extends Component {
       }
       case "borrowedBooks": {
         Taro.setNavigationBarTitle({ title: "我的借入" })
-        API.get('/shelfs/borrowed?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+        API.get('/shelfs/borrowed')
            .then(res => {
               // console.log(res.data)
               this.setState({print_books: res.data['print_books']})
@@ -46,7 +46,7 @@ export default class PrintBookList extends Component {
       }
       case "personalBooks": {
         Taro.setNavigationBarTitle({ title: "我的藏书" })
-        API.get('/shelfs/personal?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+        API.get('/shelfs/personal')
            .then(res => {
               // console.log(res.data)
               this.setState({print_books: res.data['print_books']})
