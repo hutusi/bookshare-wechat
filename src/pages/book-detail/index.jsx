@@ -1,6 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Image, Text, Block } from "@tarojs/components";
-import { AtActivityIndicator } from "taro-ui";
+import { AtActivityIndicator, AtButton, AtFloatLayout, AtTextarea } from "taro-ui";
 import moment from 'moment';
 
 import API from '../../services/api';
@@ -8,6 +8,7 @@ import NetworkError from "../../components/network-error";
 import HorizonList from "../../components/horizon-list";
 
 import "./index.scss";
+import user from "../../services/user";
 
 export default class BookDetail extends Component {
 
@@ -15,12 +16,17 @@ export default class BookDetail extends Component {
     super(...arguments);
     this.onPreview = this.onPreview.bind(this);
     this.onReload = this.onReload.bind(this);
+    this.onPopUp = this.onPopUp.bind(this);
+    this.ownBook = this.ownBook.bind(this);
   }
 
   state = {
     book: {},
     isFetching: true,
-    isError: false
+    isError: false,
+    printBooksTotal: 0,
+    isFloatLayoutOpened: false,
+    book_description: ''
   };
 
   componentDidMount() {
@@ -40,8 +46,8 @@ export default class BookDetail extends Component {
   }
 
   loadBook() {
-    let book_id = this.$router.params.id
-    API.get(`/books/${book_id}`)
+    let bookId = this.$router.params.id
+    API.get(`/books/${bookId}`)
            .then(res => {
               console.log(res.data)
               this.setState({
@@ -50,6 +56,32 @@ export default class BookDetail extends Component {
                 isError: false
               })
         })
+
+    API.get('/print_books/search_by', { 'book_id': bookId, 'owner_id': user.userId })
+        .then(res => {
+           console.log(res.data)
+           this.setState({
+             printBooks: res.data['print_books'],
+             printBooksTotal: res.data['total']
+           })
+     })
+  }
+
+  onPopUp() {
+    this.setState({
+      isFloatLayoutOpened: true
+    })
+  }
+
+  ownBook() {
+    API.post('/print_books', { 'book_id': this.state.book.id, 'description': this.state.book_description })
+        .then(res => {
+          console.log(res)
+          this.setState({
+            printBooksTotal: 1,
+            isFloatLayoutOpened: false
+          })
+     })
   }
 
   // async loadBook() {
@@ -76,7 +108,7 @@ export default class BookDetail extends Component {
   };
 
   render() {
-    const { book, isFetching, isError } = this.state;
+    const { book, isFetching, isError, printBooksTotal, isFloatLayoutOpened } = this.state;
     return (
       <View>
         {!isFetching && !isError && (
@@ -108,6 +140,20 @@ export default class BookDetail extends Component {
                 <HorizonList data={book.related_books} sideSpace={32} />
               </View>
             </View>
+
+            { printBooksTotal <= 0 && (
+              <AtButton type='primary' onClick={this.onPopUp}>拥有此书</AtButton> 
+            )}
+
+            <AtFloatLayout isOpened={isFloatLayoutOpened} title='添加图书' >
+              <AtTextarea
+                value={this.state.book_description}
+                maxLength={1024}
+                height={400}
+                placeholder='添加备注...'
+              />
+              <AtButton type='primary' onClick={this.ownBook}>拥有此书</AtButton> 
+            </AtFloatLayout>
           </Block>
         )}
         {isFetching && (
