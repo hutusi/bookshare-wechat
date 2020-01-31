@@ -36,18 +36,18 @@ export default class PrintBookCard extends Component {
     const { data, showArrow } = this.props;
     return (
       <Navigator
-        className='at-row at-row__align--start my-book-card'
+        className='at-row at-row__align--start book-card'
         hoverClass='None'
         url={`${URL.PRINT_BOOK_DETAIL}?id=${data.id}`}
       >
         <Image
-          className='at-col at-col--auto my-book-card__img'
+          className='at-col at-col--auto book-card__img'
           style={{ marginRight: Taro.pxTransform(24) }}
           src={data.book.cover}
           mode='aspectFill'
         />
-        <View className='at-col my-book-card__info'>
-          <View className='my-book-card__info-title'>{data.book.title}</View>
+        <View className='at-col book-card__info'>
+          <View className='book-card__info-title'>{data.book.title}</View>
           <View>作者：{data.book.author_name}</View>
           <View>出版社：{data.book.publisher_name}</View>
           <View>出版日期：{moment(data.book.pubdate).format('YYYY-MM-DD')}</View>

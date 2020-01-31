@@ -22,16 +22,16 @@ export default class Panel extends Component {
   componentWillMount() {}
 
   render() {
-    const rootCls = `my-panel ${this.props.className}`;
+    const rootCls = `book-panel ${this.props.className}`;
     return (
       <View className={rootCls}>
         <Navigator url={this.props.url} hoverClass='None'>
-          <View className='my-panel-header at-row at-row__align--center'>
+          <View className='book-panel-header at-row at-row__align--center'>
             <View className='at-col'>{this.props.title}</View>
-            <Text className='my-panel-header__arrow at-icon at-icon-chevron-right at-col' />
+            <Text className='book-panel-header__arrow at-icon at-icon-chevron-right at-col' />
           </View>
         </Navigator>
-        <View className='my-panel-body'>{this.props.children}</View>
+        <View className='book-panel-body'>{this.props.children}</View>
       </View>
     );
   }

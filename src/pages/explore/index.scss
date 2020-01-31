@@ -1,9 +1,0 @@
-@import "~taro-ui/dist/style/index.scss";
-@import "../../styles/variables.scss";
-@import "~taro-ui/dist/style/components/tabs.scss";
-
-.my-book-card {
-  &:after {
-    border-bottom-width: 0 !important;
-  }
-}

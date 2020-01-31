@@ -1,0 +1,170 @@
+@import "~taro-ui/dist/style/index.scss";
+@import "~taro-ui/dist/style/components/flex.scss";
+@import "styles/variables.scss";
+
+page {
+  background-color: $color-white;
+}
+
+.panel--first:after {
+  border-top-width: 0 !important;
+}
+
+.my-panel {
+  &:after {
+    border-bottom-width: 0 !important;
+  }
+}
+
+.at-button {
+  margin: $spacing-h-sm;
+}
+
+.my-book-card {
+  &:after {
+    border-bottom-width: 0 !important;
+  }
+}
+
+.book {
+  box-sizing: border-box;
+  padding: 40px $spacing-h-xl 64px;
+  background: $color-white;
+  &__img {
+    flex: 0 0 $book-image-width;
+    width: $book-image-width;
+    height: $book-image-height;
+    margin-left: 5px;
+    // box-shadow: 0 5px 25px 1px rgba(55, 58, 64, 0.14);
+  }
+
+  &__info {
+    font-size: 28px;
+    line-height: 1.7em;
+    color: $color-grey-1;
+    &-title {
+      font-size: 34px;
+      line-height: 1.8em;
+      color: $color-text-base;
+    }
+  }
+}
+
+.book-introduction,
+.related-books {
+  // margin-top: $spacing-v-md;
+  padding: $spacing-v-xl $spacing-h-xl;
+  background: $color-white;
+  color: $color-text-base;
+  @include hairline-top;
+  &__title {
+    font-size: $font-size-lg;
+  }
+  &__content {
+    margin-top: $spacing-v-md;
+  }
+  .book-introduction__content {
+    font-size: $font-size-base;
+    line-height: 1.7em;
+  }
+}
+
+.my-horizon-list-container {
+  width: 100%;
+  background: $color-white;
+}
+
+.my-horizon-list {
+  white-space: nowrap;
+  &-item {
+    display: inline-block;
+    margin-right: $spacing-h-lg;
+    vertical-align: top;
+    white-space: normal;
+    @include active;
+    &:last-child {
+      margin-right: 0;
+    }
+    &__title {
+      font-size: $font-size-base;
+      color: $color-text-base;
+      @include line(2);
+    }
+    &__author {
+      font-size: $font-size-sm;
+      color: $color-grey-1;
+      @include line(1);
+    }
+  }
+}
+
+.my-network-error {
+  @include absolute-center;
+}
+
+.book-panel {
+  position: relative;
+  background-color: $color-white;
+  @include hairline-top-bottom();
+
+  &-header {
+    box-sizing: border-box;
+    padding: $spacing-v-lg $spacing-h-lg;
+    font-size: $font-size-base;
+    @include active;
+    @include hairline-bottom-relative($left: $spacing-h-lg);
+    &__arrow {
+      flex: none;
+      width: auto;
+    }
+  }
+
+  &-body {
+    padding: $spacing-v-lg $spacing-h-lg;
+  }
+}
+
+
+.book-card {
+  box-sizing: border-box;
+  padding: $spacing-v-lg $spacing-h-lg;
+  background: $color-white;
+  @include active;
+  @include hairline-top-bottom();
+  &__img {
+    flex: 0 0 $book-image-width;
+    width: $book-image-width;
+    height: $book-image-height;
+  }
+  &__info {
+    font-size: $font-size-base;
+    line-height: 1.7em;
+    color: $color-grey-1;
+    &-title {
+      font-size: $font-size-lg;
+      line-height: 2em;
+      color: $color-text-base;
+    }
+  }
+}
+
+.user-profile {
+  box-sizing: border-box;
+  padding: $spacing-v-lg $spacing-h-lg;
+  background: $color-white;
+  @include active;
+  @include hairline-top-bottom();
+  &__avatar {
+    flex: 0 0 $user-avatar-width;
+  }
+  &__info {
+    font-size: $font-size-base;
+    line-height: 1.7em;
+    color: $color-grey-1;
+    &-name {
+      font-size: $font-size-lg;
+      line-height: 2em;
+      color: $color-text-base;
+    }
+  }
+}
