@@ -8,9 +8,10 @@
 		"es6": false,
 		"enhance": true,
 		"postcss": false,
-		"minified": false,
+		"minified": true,
 		"newFeature": true,
 		"coverView": true,
+		"nodeModules": false,
 		"autoAudits": false,
 		"uglifyFileName": false,
 		"checkInvalidKey": true,
@@ -21,8 +22,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"bundle": true,
-		"nodeModules": false
+		"bundle": true
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.10.1",
