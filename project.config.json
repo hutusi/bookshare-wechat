@@ -4,7 +4,7 @@
 	"description": "bookshare app",
 	"appid": "wx3ccb2b8e591f3441",
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": false,
 		"enhance": true,
 		"postcss": false,
