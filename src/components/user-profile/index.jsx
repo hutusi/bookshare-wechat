@@ -4,6 +4,7 @@ import { AtAvatar } from 'taro-ui';
 
 import "./index.scss";
 import user from "../../services/user";
+import AuthActionSheet from '../../components/auth-action-sheet';
 
 export default class UserProfile extends Component {
   static options = {
@@ -21,11 +22,12 @@ export default class UserProfile extends Component {
 
     this.state = {
       userInfo: user.getInfo(),
-      loggedIn: user.isLoggedIn()
+      loggedIn: user.isLoggedIn(),
+      isAuthNeeded: false
     };
   }
 
-  componentWillMount () {
+  componentWillMount() {
     this.tryLogin();
   }
 
@@ -42,10 +44,17 @@ export default class UserProfile extends Component {
       // console.log(result)
       that.setState({
         userInfo: user.getInfo(),
-        loggedIn: user.isLoggedIn()
+        loggedIn: user.isLoggedIn(),
+        isAuthNeeded: false
       });
     }).catch(error => {
       console.error(error);
+
+      that.setState({
+        userInfo: user.getInfo(),
+        loggedIn: false,
+        isAuthNeeded: true
+      });
     });
     // try {
     //   // Taro.checkSession();
@@ -59,8 +68,12 @@ export default class UserProfile extends Component {
     this.tryLogin();
   }
 
+  GetUserInfo(e) {
+    console.log("xxxxx GetUserInfo xxxx", e);
+  }
+
   render() {
-    const { userInfo, loggedIn } = this.state;
+    const { userInfo, loggedIn, isAuthNeeded } = this.state;
     return (
       <View>
         {loggedIn ? (
@@ -95,6 +108,8 @@ export default class UserProfile extends Component {
             style={{ alignSelf: "center" }}
           />
         )} */}
+
+        <AuthActionSheet isAuthNeeded={isAuthNeeded} onGetUserInfo={this.GetUserInfo} />
       </View>
     );
   }

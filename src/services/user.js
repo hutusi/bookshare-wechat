@@ -43,6 +43,8 @@ class User {
       } else {
         that.fetchInfo().then(result => {
           resolve(result);
+        }).catch(err => {
+          reject(err);
         });
       }
 
@@ -113,9 +115,18 @@ class User {
     const promise = new Promise(function(resolve, reject) {
       API.get('/users/' + that.userId
         ).then(result => {
-          that.userInfo = result.data;
-          console.log(that.userInfo)
-          resolve(that.userInfo);
+          console.log(result.data);
+          if (result.data['nickname']) {
+            that.userInfo = result.data;
+            resolve(that.userInfo);
+          } else {
+            that.updateUserInfo().then(res => {
+              resolve(res);
+            }).catch(e => {
+              console.error(e);
+              reject(e);
+            });
+          }
         }).catch(err => {
           console.error(err);
           reject(err);

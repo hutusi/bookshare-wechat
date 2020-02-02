@@ -21,15 +21,15 @@ export default class Explore extends Component {
   componentWillMount () { }
 
   componentDidMount () {
-    API.get('/print_books/for_share?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+    API.get('/print_books/for_share')
         .then(res => {
-          // console.log(res.data)
+          console.log(res.data)
           this.setState({shared_books: res.data['print_books']})
     })
 
-    API.get('/print_books/for_borrow?provider=wechat&uid=1', "{'provider':'wechat','uid':'1'}")
+    API.get('/print_books/for_borrow')
         .then(res => {
-          // console.log(res.data)
+          console.log(res.data)
           this.setState({borrowable_books: res.data['print_books']})
     })
   }

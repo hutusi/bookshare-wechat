@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import { AtButton, AtMessage } from 'taro-ui'
 
 import API from '../../services/api';
@@ -19,7 +19,8 @@ export default class Shelf extends Component {
     lentBooks: [],
     borrowedBooks: [],
     receivedBooks: [],
-    personalBooks: []
+    personalBooks: [],
+    isUserAuthOpened: true
   }
 
   componentWillMount () {
@@ -151,7 +152,6 @@ export default class Shelf extends Component {
         }
 
         <AtButton type='primary' onClick={this.onAddBook}>添加藏书</AtButton>
-
       </View>
     )
   }
