@@ -103,6 +103,14 @@ export default class PrintBookDetail extends Component {
                 {book.book.summary}
               </View>
             </View>
+            { book.description && (
+              <View className='book-introduction'>
+                <View className='book-introduction__title'>藏书备注</View>
+                <View className='book-introduction__content'>
+                  {book.description}
+                </View>
+              </View>
+            )}
             <View className='related-books'>
               <View className='related-books__title'>相关图书</View>
               <View className='related-books__content'>

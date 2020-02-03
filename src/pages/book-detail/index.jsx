@@ -74,6 +74,7 @@ export default class BookDetail extends Component {
   }
 
   ownBook() {
+    // console.log('book description :', this.state.book_description);
     API.post('/print_books', { 'book_id': this.state.book.id, 'description': this.state.book_description })
         .then(res => {
           console.log(res)
@@ -82,6 +83,12 @@ export default class BookDetail extends Component {
             isFloatLayoutOpened: false
           })
      })
+  }
+
+  bookDescInputHandler(e) {
+    this.setState({
+      book_description: e.target.value
+    })
   }
 
   // async loadBook() {
@@ -148,6 +155,7 @@ export default class BookDetail extends Component {
             <AtFloatLayout isOpened={isFloatLayoutOpened} title='添加图书' >
               <AtTextarea
                 value={this.state.book_description}
+                onChange={this.bookDescInputHandler.bind(this)}
                 maxLength={1024}
                 height={400}
                 placeholder='添加备注...'
