@@ -64,15 +64,16 @@ class User {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       Taro.getUserInfo().then(result => {
-        that.userInfo = result.userInfo;
-        API.put('/users/' + that.userId, { nickname: that.userInfo.nickName,
-          avatar: that.userInfo.avatarUrl, gender: that.userInfo.gender, 
-          country: that.userInfo.country, province: that.userInfo.province,
-          city: that.userInfo.city, language: that.userInfo.language}).then(res => {
+        // console.log(result.userInfo);
+        API.put('/users/' + that.userId, { nickname: result.userInfo.nickName,
+          avatar: result.userInfo.avatarUrl, gender: result.userInfo.gender, 
+          country: result.userInfo.country, province: result.userInfo.province,
+          city: result.userInfo.city, language: result.userInfo.language}).then(apiRes => {
+            that.userInfo = apiRes.data;
             resolve(that.userInfo);
-        }).catch(api_err => {
-          console.error(api_err);
-          reject(api_err);
+        }).catch(apiErr => {
+          console.error(apiErr);
+          reject(apiErr);
         });
       }).catch(err => {
         console.error(err);

@@ -69,7 +69,24 @@ export default class UserProfile extends Component {
   }
 
   GetUserInfo(e) {
-    console.log("xxxxx GetUserInfo xxxx", e);
+    // console.log("xxxxx GetUserInfo xxxx", e);
+
+    user.updateUserInfo().then(result => {
+      // console.log(result)
+      this.setState({
+        userInfo: user.getInfo(),
+        loggedIn: true,
+        isAuthNeeded: false
+      });
+    }).catch(error => {
+      console.error(error);
+
+      this.setState({
+        userInfo: user.getInfo(),
+        loggedIn: false,
+        isAuthNeeded: true
+      });
+    });
   }
 
   render() {
@@ -109,7 +126,7 @@ export default class UserProfile extends Component {
           />
         )} */}
 
-        <AuthActionSheet isAuthNeeded={isAuthNeeded} onGetUserInfo={this.GetUserInfo} />
+        <AuthActionSheet isAuthNeeded={isAuthNeeded} onGetUserInfo={this.GetUserInfo.bind(this)} />
       </View>
     );
   }

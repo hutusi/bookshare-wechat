@@ -24,6 +24,11 @@ export default class AuthActionSheet extends Component {
 
   onGetUserInfo(e) {
     e.stopPropagation()
+
+    // console.log('GetUserInfo ....', e);
+    // console.log(this.props);
+
+    this.props.onGetUserInfo(e);
   }
 
   render() {
