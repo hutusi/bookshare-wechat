@@ -41,15 +41,16 @@ export default class PrintBookDetail extends Component {
 
   loadBook() {
     let book_id = this.$router.params.id
-    API.get(`/print_books/${book_id}`)
-           .then(res => {
-              console.log(res.data)
-              this.setState({
-                book: res.data,
-                isFetching: false,
-                isError: false
-              })
-        })
+    API.get(`/print_books/${book_id}`).then(res => {
+      // console.log(res.data)
+      this.setState({
+        book: res.data,
+        isFetching: false,
+        isError: false
+      });
+    }).catch(err => {
+      console.error(err);
+    });
   }
 
   // async loadBook() {

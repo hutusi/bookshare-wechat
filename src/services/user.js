@@ -116,7 +116,7 @@ class User {
     const promise = new Promise(function(resolve, reject) {
       API.get('/users/' + that.userId
         ).then(result => {
-          console.log(result.data);
+          // console.log(result.data);
           if (result.data['nickname']) {
             that.userInfo = result.data;
             resolve(that.userInfo);

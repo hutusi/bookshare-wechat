@@ -47,24 +47,27 @@ export default class BookDetail extends Component {
 
   loadBook() {
     let bookId = this.$router.params.id
-    API.get(`/books/${bookId}`)
-           .then(res => {
-              console.log(res.data)
-              this.setState({
-                book: res.data,
-                isFetching: false,
-                isError: false
-              })
-        })
+    API.get(`/books/${bookId}`).then(res => {
+      // console.log(res.data)
+      this.setState({
+        book: res.data,
+        isFetching: false,
+        isError: false
+      });
+    }).catch(err => {
+      console.error(err);
+    });
 
-    API.get('/print_books/search_by', { 'book_id': bookId, 'owner_id': user.userId })
-        .then(res => {
-           console.log(res.data)
-           this.setState({
-             printBooks: res.data['print_books'],
-             printBooksTotal: res.data['total']
-           })
-     })
+    API.get('/print_books/search_by', 
+        { 'book_id': bookId, 'owner_id': user.userId }).then(res => {
+      // console.log(res.data)
+      this.setState({
+        printBooks: res.data['print_books'],
+        printBooksTotal: res.data['total']
+      });
+    }).catch(err => {
+      console.error(err);
+    });
   }
 
   onPopUp() {
@@ -75,14 +78,16 @@ export default class BookDetail extends Component {
 
   ownBook() {
     // console.log('book description :', this.state.book_description);
-    API.post('/print_books', { 'book_id': this.state.book.id, 'description': this.state.book_description })
-        .then(res => {
-          console.log(res)
-          this.setState({
-            printBooksTotal: 1,
-            isFloatLayoutOpened: false
-          })
-     })
+    API.post('/print_books', { 'book_id': this.state.book.id, 
+      'description': this.state.book_description }).then(res => {
+      // console.log(res)
+      this.setState({
+        printBooksTotal: 1,
+        isFloatLayoutOpened: false
+      });
+    }).catch(err => {
+      console.error(err);
+    });
   }
 
   bookDescInputHandler(e) {

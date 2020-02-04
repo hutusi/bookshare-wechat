@@ -26,7 +26,9 @@ class App extends Component {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+      enablePullDownRefresh: true,
+      backgroundTextStyle: 'dark'
     },
     tabBar: {
       list: [

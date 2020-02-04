@@ -24,24 +24,10 @@ export default class Shelf extends Component {
   }
 
   componentWillMount () {
-    
-    // user.login();
-
-    console.log(user);
-    
-    API.get('/shelfs/summary')
-      .then(res => {
-        console.log(res.data)
-        this.setState({sharedBooks: res.data['shared']})
-        this.setState({lentBooks: res.data['lent']})
-        this.setState({borrowedBooks: res.data['borrowed']})
-        this.setState({receivedBooks: res.data['received']})
-        this.setState({personalBooks: res.data['personal']})
-      })
+    this.refresh();
   }
 
-  componentDidMount () { 
-  }
+  componentDidMount () { }
 
   componentWillUnmount () { }
 
@@ -51,6 +37,26 @@ export default class Shelf extends Component {
 
   config = {
     navigationBarTitleText: '书架'
+  }
+
+  refresh() {
+    let that = this;
+    const promise = new Promise(function(resolve, reject) {
+      API.get('/shelfs/summary').then(res => {
+        // console.log(res.data)
+        that.setState({sharedBooks: res.data['shared']})
+        that.setState({lentBooks: res.data['lent']})
+        that.setState({borrowedBooks: res.data['borrowed']})
+        that.setState({receivedBooks: res.data['received']})
+        that.setState({personalBooks: res.data['personal']})
+
+        resolve(res.data);
+      }).catch(err => {
+        console.error(err);
+        reject(err);
+      })
+    });
+    return promise;
   }
 
   notFoundBook () {
@@ -101,6 +107,14 @@ export default class Shelf extends Component {
         // })();
       })
       .catch(err => console.log(err));
+  }
+
+  onPullDownRefresh() {
+    this.refresh().then(result => { 
+      Taro.stopPullDownRefresh();
+    }).catch(error => {
+      console.error(error);
+    });
   }
 
   render () {
