@@ -21,6 +21,7 @@ class App extends Component {
       'pages/printbook-detail/index',
 
       'pages/book-detail/index',
+      'pages/printbook-property/index',
     ],
     window: {
       backgroundTextStyle: 'light',
