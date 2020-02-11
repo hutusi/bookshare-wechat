@@ -11,7 +11,8 @@ export default {
     let contentType = "application/json";
     contentType = params.contentType || contentType;
     let urlStr = BASE_URL + url;
-    urlStr +='?user_id=' + userId + '&api_token=' + apiToken
+    urlStr +='?user_id=' + userId + '&api_token=' + apiToken;
+    console.log(urlStr);
     const option = {
       url: urlStr,
       data: data,

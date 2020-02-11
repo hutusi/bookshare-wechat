@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtMessage, AtAccordion, AtList, AtListItem  } from 'taro-ui'
 
+import URL from "../../constants/urls";
 import API from '../../services/api';
 import user from '../../services/user';
 import UserProfile from '../../components/user-profile';
@@ -67,6 +68,10 @@ export default class Dashboard extends Component {
     });
   }
 
+  onClickTodoItem(sharingId) {
+    Taro.navigateTo({'url': `${URL.SHARING_DETAIL}?id=${sharingId}`});
+  }
+
   config = {
     navigationBarTitleText: '我的'
   }
@@ -94,6 +99,7 @@ export default class Dashboard extends Component {
                   title={item.title}
                   note={item.note}
                   thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+                  onClick={this.onClickTodoItem.bind(this, item.id)}
                 />
               );
             })}
@@ -113,6 +119,7 @@ export default class Dashboard extends Component {
                   title={item.title}
                   note={item.note}
                   thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+                  onClick={this.onClickTodoItem.bind(this, item.id)}
                 />
               );
             })}

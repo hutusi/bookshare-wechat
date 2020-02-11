@@ -13,8 +13,8 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/shelf/index',
       'pages/explore/index',
+      'pages/shelf/index',
       'pages/dashboard/index',
 
       'pages/printbook-list/index',
@@ -22,6 +22,7 @@ class App extends Component {
 
       'pages/book-detail/index',
       'pages/printbook-property/index',
+      'pages/sharing-detail/index',
     ],
     window: {
       backgroundTextStyle: 'light',

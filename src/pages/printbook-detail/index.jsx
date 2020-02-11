@@ -45,7 +45,7 @@ export default class PrintBookDetail extends Component {
   }
 
   loadBook() {
-    let book_id = this.$router.params.id
+    let book_id = this.$router.params.id;
     API.get(`/print_books/${book_id}`).then(res => {
       // console.log(res.data)
       let mainButton = this.getMainButton(res.data);
