@@ -1,6 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Image, Text, Block } from "@tarojs/components";
-import { AtActivityIndicator, AtButton } from "taro-ui";
+import { AtMessage, AtActivityIndicator, AtButton, AtFloatLayout, AtTextarea } from "taro-ui";
 import moment from 'moment';
 
 import URL from "../../constants/urls";
@@ -24,7 +24,8 @@ export default class PrintBookDetail extends Component {
     book: {},
     isFetching: true,
     isError: false,
-    mainButton: null
+    mainButton: null,
+    isApplyFloatLayoutOpened: false
   };
 
   componentDidMount() {
@@ -62,7 +63,9 @@ export default class PrintBookDetail extends Component {
   getMainButton(book) {
     let mainButton = {enabled: true, visible: true};
 
-    if (book.owner_id == user.userId) {
+    if (!user) { /* no login */
+      mainButton.visible = false;
+    } else if (book.owner_id == user.userId) {
       if (book.property == 'personal') {
         mainButton.text = '共享/借出';
         mainButton.onClick = this.onClickSetProperty.bind(this);
@@ -71,7 +74,12 @@ export default class PrintBookDetail extends Component {
         mainButton.onClick = this.onClickSetProperty.bind(this);
       }
     } else {
-      mainButton.visible = false;
+      if (book.property == 'personal') {
+        mainButton.visible = false;
+      } else {
+        mainButton.text = '预约申请';
+        mainButton.onClick = this.onClickApply.bind(this);
+      }
     }
 
     return mainButton;
@@ -82,6 +90,35 @@ export default class PrintBookDetail extends Component {
     Taro.navigateTo({'url': `${URL.PRINT_BOOK_PROPERTY}?id=${this.state.book.id}`});
   }
 
+  onClickApply() {
+    this.setState({
+      isApplyFloatLayoutOpened: true
+    })
+  }
+
+  onRequestBook() {
+    API.post('/sharings', { 'print_book_id': this.state.book.id, 
+      'application_reason': this.state.applicationReason }).then(res => {
+      console.log(res.data)
+      Taro.atMessage({
+        'message': '预约成功！',
+        'type': 'success',
+      });
+    }).catch(err => {
+      console.error(err);
+    }).finally(() => {
+      this.setState({
+        isApplyFloatLayoutOpened: false
+      });
+    });
+  }
+
+  onApplicationReasonChange(e) {
+    this.setState({
+      applicationReason: e.target.value
+    })
+  }
+
   config = {
     navigationBarTitleText: "藏书详情"
   };
@@ -90,6 +127,8 @@ export default class PrintBookDetail extends Component {
     const { book, isFetching, isError, mainButton } = this.state;
     return (
       <View>
+        <AtMessage />
+
         {!isFetching && !isError && (
           <Block>
             <View className='at-row at-row__align--start book'>
@@ -133,6 +172,16 @@ export default class PrintBookDetail extends Component {
         {mainButton && mainButton.visible && (
           <AtButton type='primary' onClick={mainButton.onClick} >{mainButton.text}</AtButton>
         )}
+        <AtFloatLayout isOpened={this.state.isApplyFloatLayoutOpened} title='预约借书' >
+          <AtTextarea
+            value={this.state.value}
+            onChange={this.onApplicationReasonChange.bind(this)}
+            maxLength={1024}
+            height={400}
+            placeholder='添加预约图书的理由...'
+          />
+          <AtButton type='primary' onClick={this.onRequestBook.bind(this)}>申请预约</AtButton> 
+        </AtFloatLayout>
         {isFetching && (
           <AtActivityIndicator mode='center' content='加载中...' />
         )}

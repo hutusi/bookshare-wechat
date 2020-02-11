@@ -45,6 +45,12 @@ class App extends Component {
           iconPath: "./assets/icons/tab_shelf.png",
           selectedIconPath: "./assets/icons/tab_shelf_s.png"
         },
+        {
+          pagePath: "pages/dashboard/index",
+          text: "我的",
+          iconPath: "./assets/icons/tab_user.png",
+          selectedIconPath: "./assets/icons/tab_user_s.png"
+        },
       ],
       color: "#a6a6a6",
       selectedColor: "#78a4fa",

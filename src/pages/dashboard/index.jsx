@@ -1,16 +1,31 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtAvatar, AtList, AtListItem  } from 'taro-ui'
+import { AtMessage, AtAccordion, AtList, AtListItem  } from 'taro-ui'
+
+import API from '../../services/api';
+import user from '../../services/user';
+import UserProfile from '../../components/user-profile';
 
 import "./index.scss";
 
 export default class Dashboard extends Component {
 
-  config = {
-    navigationBarTitleText: '我的'
+  constructor() {
+    super(...arguments);
+    
+    this.state = {
+      todoAccordionOpened: true,
+      todo: [],
+      applyAccordionOpened: true,
+      apply: []
+    }
+
+    this.onFetchDashboard = this.onFetchDashboard.bind(this);
   }
 
-  componentWillMount () { }
+  componentWillMount () {
+    this.onFetchDashboard();
+  }
 
   componentDidMount () { }
 
@@ -20,24 +35,90 @@ export default class Dashboard extends Component {
 
   componentDidHide () { }
 
+  onClickAccordion (stateName, value) {
+    this.setState({
+      [stateName]: value
+    });
+  }
+
+  onFetchDashboard() {
+    let that = this;
+    const promise = new Promise(function(resolve, reject) {
+      API.get('/dashboard').then(apiRes => {
+        console.log(apiRes.data);
+        that.setState({
+          todo: apiRes.data['todo'],
+          apply: apiRes.data['apply'],
+        });
+        resolve(apiRes.data);
+      }).catch(apiErr => {
+        console.error(apiErr);
+        reject(apiErr);
+      });
+    });
+    return promise;
+  }
+
+  onPullDownRefresh() {
+    this.onFetchDashboard().then(result => { 
+      Taro.stopPullDownRefresh();
+    }).catch(error => {
+      console.error(error);
+    });
+  }
+
+  config = {
+    navigationBarTitleText: '我的'
+  }
+
   render () {
+    const { todo, todoAccordionOpened, apply, applyAccordionOpened } = this.state
+
     return (
       <View className='dashboard'>
 
-        <AtList>
-          <AtListItem
-            title='我的藏书'
-            arrow='right'
-            iconInfo={{ size: 16, color: '#78A4FA', value: 'calendar', }}
-          />
-          <AtListItem
-            title='我的借阅'
-            arrow='right'
-            iconInfo={{ size: 16, color: '#FF4949', value: 'bookmark', }}
-          />
-        </AtList>
+        <AtMessage />
 
-        <Text>Hello world!</Text>
+        <UserProfile />
+
+        <AtAccordion
+          open={todoAccordionOpened}
+          title='待办事项'
+          onClick={this.onClickAccordion.bind(this, 'todoAccordionOpened')}
+        >
+          <AtList hasBorder={false}>
+            {todo.map(item => {
+              return (
+                <AtListItem
+                  key={item.id}
+                  title={item.title}
+                  note={item.note}
+                  thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+                />
+              );
+            })}
+          </AtList>
+        </AtAccordion>
+
+        <AtAccordion
+          open={applyAccordionOpened}
+          title='我的申请'
+          onClick={this.onClickAccordion.bind(this, 'applyAccordionOpened')}
+        >
+          <AtList hasBorder={false}>
+            {apply.map(item => {
+              return (
+                <AtListItem
+                  key={item.id}
+                  title={item.title}
+                  note={item.note}
+                  thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+                />
+              );
+            })}
+          </AtList>
+        </AtAccordion>
+
       </View>
     )
   }
