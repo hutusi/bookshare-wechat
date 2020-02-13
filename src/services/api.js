@@ -12,7 +12,7 @@ export default {
     contentType = params.contentType || contentType;
     let urlStr = BASE_URL + url;
     urlStr +='?user_id=' + userId + '&api_token=' + apiToken;
-    console.log(urlStr);
+    // console.log(urlStr);
     const option = {
       url: urlStr,
       data: data,
