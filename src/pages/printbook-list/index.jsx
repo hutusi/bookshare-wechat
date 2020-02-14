@@ -18,7 +18,7 @@ export default class PrintBookList extends Component {
     const { type } = this.$router.params;
     switch (type) {
       case "sharedBooks": {
-        Taro.setNavigationBarTitle({ title: "我的分享" });
+        Taro.setNavigationBarTitle({ title: "我的共享藏书" });
         API.get('/shelfs/shared').then(res => {
           // console.log(res.data)
           this.setState({print_books: res.data['print_books']});
@@ -40,6 +40,16 @@ export default class PrintBookList extends Component {
       case "borrowedBooks": {
         Taro.setNavigationBarTitle({ title: "我的借入" });
         API.get('/shelfs/borrowed').then(res => {
+          // console.log(res.data)
+          this.setState({print_books: res.data['print_books']});
+        }).catch(err => {
+          console.error(err);
+        });
+        break
+      }
+      case "receivedBooks": {
+        Taro.setNavigationBarTitle({ title: "我借入的共享藏书" });
+        API.get('/shelfs/received').then(res => {
           // console.log(res.data)
           this.setState({print_books: res.data['print_books']});
         }).catch(err => {

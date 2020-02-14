@@ -4,12 +4,9 @@ import { AtButton, AtMessage, AtModal, AtModalHeader,
   AtModalContent, AtModalAction, AtInput } from 'taro-ui'
 
 import API from '../../services/api';
-import REST from '../../services/rest';
-import user from '../../services/user';
 import Panel from '../../components/panel';
 import HorizonList from '../../components/horizon-list';
 import URL from "../../constants/urls";
-import UserProfile from '../../components/user-profile';
 
 import './index.scss'
 
@@ -21,7 +18,6 @@ export default class Shelf extends Component {
     borrowedBooks: [],
     receivedBooks: [],
     personalBooks: [],
-    isUserAuthOpened: true,
     isbnInputOpened: false,
     isbnInput: ''
   }
@@ -46,7 +42,7 @@ export default class Shelf extends Component {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/shelfs/summary').then(res => {
-        // console.log(res.data)
+        console.log(res.data)
         that.setState({sharedBooks: res.data['shared']})
         that.setState({lentBooks: res.data['lent']})
         that.setState({borrowedBooks: res.data['borrowed']})
@@ -176,15 +172,25 @@ export default class Shelf extends Component {
 
         <AtMessage />
 
-        <UserProfile />
+        {/* <UserProfile /> */}
 
         {this.state.sharedBooks.length > 0 &&
           <Panel
             url={`${URL.PRINT_BOOK_LIST}?type=sharedBooks`}
-            title='我的分享'
+            title='我的共享藏书'
             className='panel--first'
           >
             <HorizonList data={this.state.sharedBooks} />
+          </Panel>
+        }
+
+        {this.state.receivedBooks.length > 0 &&
+          <Panel
+            url={`${URL.PRINT_BOOK_LIST}?type=receivedBooks`}
+            title='我借入的共享藏书'
+            className='panel--first'
+          >
+            <HorizonList data={this.state.receivedBooks} />
           </Panel>
         }
 
