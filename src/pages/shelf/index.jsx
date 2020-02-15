@@ -77,8 +77,8 @@ export default class Shelf extends Component {
 
     API.get('/books/isbn/' + isbn).then(apiRes => {
       // console.log(apiRes.data);
-      let bookId = apiRes.data['id'];
-      Taro.navigateTo({'url': `${URL.BOOK_DETAIL}?id=${bookId}`});
+      let book = apiRes.data['book'];
+      Taro.navigateTo({'url': `${URL.BOOK_DETAIL}?id=${book.id}`});
     }).catch(apiErr => {
       console.error(apiErr);
       this.notFoundBook();

@@ -49,8 +49,9 @@ export default class BookDetail extends Component {
     let bookId = this.$router.params.id
     API.get(`/books/${bookId}`).then(res => {
       // console.log(res.data)
+      let book = res.data['book'];
       this.setState({
-        book: res.data,
+        book: book,
         isFetching: false,
         isError: false
       });
@@ -61,9 +62,10 @@ export default class BookDetail extends Component {
     API.get('/print_books/search_by', 
         { 'book_id': bookId, 'owner_id': user.userId }).then(res => {
       // console.log(res.data)
+      let printBooks = res.data['print_books'];
       this.setState({
-        printBooks: res.data['print_books'],
-        printBooksTotal: res.data['total']
+        printBooks: printBooks,
+        printBooksTotal: printBooks.length
       });
     }).catch(err => {
       console.error(err);

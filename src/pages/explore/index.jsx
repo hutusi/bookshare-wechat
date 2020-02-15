@@ -39,7 +39,7 @@ export default class Explore extends Component {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/print_books/for_share').then(res => {
-        // console.log(res.data)
+        console.log(res)
         that.setState({shared_books: res.data['print_books']});
         resolve(res.data);
       }).catch(err => {

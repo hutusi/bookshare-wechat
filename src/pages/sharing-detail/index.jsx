@@ -33,8 +33,8 @@ export default class SharingDetail extends Component {
     API.get(`/sharings/${this.sharingId}`).then(res => {
       console.log(res, user.userId)
       this.originReply = res.data.application_reply;
-      let stateData = res.data;
-      stateData['submitButton'] = this.getSubmit(res.data);
+      let stateData = res.data['sharing'];
+      stateData['submitButton'] = this.getSubmit(stateData);
       this.setState(stateData);
     }).catch(err => {
       console.error(err);

@@ -69,7 +69,7 @@ class User {
           avatar: result.userInfo.avatarUrl, gender: result.userInfo.gender, 
           country: result.userInfo.country, province: result.userInfo.province,
           city: result.userInfo.city, language: result.userInfo.language}).then(apiRes => {
-            that.userInfo = apiRes.data;
+            that.userInfo = apiRes.data['user'];
             resolve(that.userInfo);
         }).catch(apiErr => {
           console.error(apiErr);
@@ -118,7 +118,7 @@ class User {
         ).then(result => {
           // console.log(result.data);
           if (result.data['nickname']) {
-            that.userInfo = result.data;
+            that.userInfo = result.data['user'];
             resolve(that.userInfo);
           } else {
             that.updateUserInfo().then(res => {
