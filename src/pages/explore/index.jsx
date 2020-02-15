@@ -89,7 +89,7 @@ export default class Explore extends Component {
   }
 
   render () {
-    const tabList = [{ title: '分享' }, { title: '借阅' }]
+    const tabList = [{ title: '共享' }, { title: '借阅' }]
     let shared_books = this.state.shared_books;
     let borrowable_books = this.state.borrowable_books;
 

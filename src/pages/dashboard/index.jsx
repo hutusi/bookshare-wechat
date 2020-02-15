@@ -6,6 +6,7 @@ import URL from "../../constants/urls";
 import API from '../../services/api';
 import user from '../../services/user';
 import UserProfile from '../../components/user-profile';
+import AccordionList from '../../components/accordion-list';
 
 import bookPng from '../../assets/icons/book.png'
 
@@ -17,10 +18,10 @@ export default class Dashboard extends Component {
     super(...arguments);
     
     this.state = {
-      todoAccordionOpened: true,
-      todo: [],
-      applyAccordionOpened: true,
-      apply: []
+      approvingSharings: [],
+      requestingSharings: [],
+      approvingBorrowings: [],
+      requestingBorrowings: []
     }
 
     this.onFetchDashboard = this.onFetchDashboard.bind(this);
@@ -38,20 +39,16 @@ export default class Dashboard extends Component {
 
   componentDidHide () { }
 
-  onClickAccordion (stateName, value) {
-    this.setState({
-      [stateName]: value
-    });
-  }
-
   onFetchDashboard() {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/dashboard').then(apiRes => {
         console.log(apiRes.data);
         that.setState({
-          todo: apiRes.data['todo'],
-          apply: apiRes.data['apply'],
+          approvingSharings: that.toApprovingItems(apiRes.data['approving_sharings']),
+          requestingSharings: that.toRequestingItems(apiRes.data['requesting_sharings']),
+          approvingBorrowings: that.toApprovingItems(apiRes.data['approving_borrowings']),
+          requestingBorrowings: that.toRequestingItems(apiRes.data['requesting_borrowings']),
         });
         resolve(apiRes.data);
       }).catch(apiErr => {
@@ -62,6 +59,32 @@ export default class Dashboard extends Component {
     return promise;
   }
 
+  toApprovingItems(data) {
+    let items = []
+    data.forEach(element => {
+      items.push({
+        id: element.id,
+        title: element.book.title,
+        note: element.status + ' - ' + element.receiver.nickname,
+        thumb: bookPng,
+      });
+    });
+    return items;
+  }
+
+  toRequestingItems(data) {
+    let items = []
+    data.forEach(element => {
+      items.push({
+        id: element.id,
+        title: element.book.title,
+        note: element.status + ' - ' + element.holder.nickname,
+        thumb: bookPng,
+      });
+    });
+    return items;
+  }
+
   onPullDownRefresh() {
     this.onFetchDashboard().then(result => { 
       Taro.stopPullDownRefresh();
@@ -70,17 +93,11 @@ export default class Dashboard extends Component {
     });
   }
 
-  onClickTodoItem(sharingId) {
-    Taro.navigateTo({'url': `${URL.SHARING_DETAIL}?id=${sharingId}`});
-  }
-
   config = {
     navigationBarTitleText: '我的'
   }
 
   render () {
-    const { todo, todoAccordionOpened, apply, applyAccordionOpened } = this.state
-
     return (
       <View className='dashboard'>
 
@@ -88,45 +105,10 @@ export default class Dashboard extends Component {
 
         <UserProfile />
 
-        <AtAccordion
-          open={todoAccordionOpened}
-          title='待办事项'
-          onClick={this.onClickAccordion.bind(this, 'todoAccordionOpened')}
-        >
-          <AtList hasBorder={false}>
-            {todo.map(item => {
-              return (
-                <AtListItem
-                  key={item.id}
-                  title={item.title}
-                  note={item.note}
-                  thumb={bookPng}
-                  onClick={this.onClickTodoItem.bind(this, item.id)}
-                />
-              );
-            })}
-          </AtList>
-        </AtAccordion>
-
-        <AtAccordion
-          open={applyAccordionOpened}
-          title='我的申请'
-          onClick={this.onClickAccordion.bind(this, 'applyAccordionOpened')}
-        >
-          <AtList hasBorder={false}>
-            {apply.map(item => {
-              return (
-                <AtListItem
-                  key={item.id}
-                  title={item.title}
-                  note={item.note}
-                  thumb={bookPng}
-                  onClick={this.onClickTodoItem.bind(this, item.id)}
-                />
-              );
-            })}
-          </AtList>
-        </AtAccordion>
+        <AccordionList title='待确认共享' data={this.state.approvingSharings} />
+        <AccordionList title='申请共享' data={this.state.requestingSharings} />
+        <AccordionList title='待确认借出' data={this.state.approvingBorrowings} />
+        <AccordionList title='申请借入' data={this.state.requestingBorrowings} />
 
       </View>
     )

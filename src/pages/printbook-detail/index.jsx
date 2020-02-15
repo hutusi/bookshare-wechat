@@ -98,7 +98,19 @@ export default class PrintBookDetail extends Component {
   }
 
   onRequestBook() {
-    API.post('/sharings', { 'print_book_id': this.state.book.id, 
+    let requestType = '';
+    if (this.state.book.property == 'borrowable') {
+      requestType = 'borrowings';
+    } else if (this.state.book.property == 'shared') {
+      requestType = 'sharings';
+    } else {
+      Taro.atMessage({
+        'message': '预约成功！',
+        'type': 'warn',
+      });
+    }
+    
+    API.post(`/${requestType}`, { 'print_book_id': this.state.book.id, 
       'application_reason': this.state.applicationReason }).then(res => {
       console.log(res.data)
       Taro.atMessage({
