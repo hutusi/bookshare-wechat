@@ -4,6 +4,7 @@ import { AtMessage, AtNoticebar } from "taro-ui";
 
 import API from '../../services/api';
 import PrintBookCard from "../../components/printbook-card";
+import PrintBookPagination from "../../components/printbook-pagination";
 
 import "./index.scss";
 
@@ -11,63 +12,63 @@ export default class PrintBookList extends Component {
 
   constructor() {
     super(...arguments);
-    this.state = { print_books: [] };
+    this.state = { 
+      printBooks: [],
+      meta: {},
+    };
+    this.onFetchBooks = this.onFetchBooks.bind(this);
   }
 
   componentDidMount() {
     const { type } = this.$router.params;
+    let title = '';
     switch (type) {
       case "sharedBooks": {
-        Taro.setNavigationBarTitle({ title: "我的共享藏书" });
-        API.get('/shelfs/shared').then(res => {
-          // console.log(res.data)
-          this.setState({print_books: res.data['print_books']});
-        }).catch(err => {
-          console.error(err);
-        });
+        title = '我的共享藏书';
+        this.fetchURL = '/shelfs/shared';
         break
       }
       case "lentBooks": {
-        Taro.setNavigationBarTitle({ title: "我的借出" });
-        API.get('/shelfs/lent').then(res => {
-          // console.log(res.data)
-          this.setState({print_books: res.data['print_books']});
-        }).catch(err => {
-          console.error(err);
-        });
+        title = '我的借出';
+        this.fetchURL = '/shelfs/lent';
         break
       }
       case "borrowedBooks": {
-        Taro.setNavigationBarTitle({ title: "我的借入" });
-        API.get('/shelfs/borrowed').then(res => {
-          // console.log(res.data)
-          this.setState({print_books: res.data['print_books']});
-        }).catch(err => {
-          console.error(err);
-        });
+        title = '我的借入';
+        this.fetchURL = '/shelfs/borrowed';
         break
       }
       case "receivedBooks": {
-        Taro.setNavigationBarTitle({ title: "我借入的共享藏书" });
-        API.get('/shelfs/received').then(res => {
-          // console.log(res.data)
-          this.setState({print_books: res.data['print_books']});
-        }).catch(err => {
-          console.error(err);
-        });
+        title = '我借入的共享藏书';
+        this.fetchURL = '/shelfs/received';
         break
       }
       case "personalBooks": {
-        Taro.setNavigationBarTitle({ title: "我的藏书" });
-        API.get('/shelfs/personal').then(res => {
-          // console.log(res.data)
-          this.setState({print_books: res.data['print_books']});
-        }).catch(err => {
-          console.error(err);
-        });
+        title = '我的藏书';
+        this.fetchURL = '/shelfs/personal';
         break
       }
     }
+
+    Taro.setNavigationBarTitle({ title: title });
+    this.onFetchBooks(1);
+  }
+
+  onFetchBooks(page) {
+    API.get(this.fetchURL, { 'page': page }).then(res => {
+      // console.log(res.data)
+      this.setState({
+        printBooks: res.data['print_books'],
+        meta: res.data['meta'],
+      });
+    }).catch(err => {
+      console.error(err);
+    });
+  }
+
+  onPageChange(data) {
+    console.log(data);
+    this.onFetchBooks(data.current);
   }
 
   config = {
@@ -75,13 +76,17 @@ export default class PrintBookList extends Component {
   };
 
   render() {
-    let data = this.state.print_books;
     return (
       <View>
         <AtMessage />
-        {data.map(item => (
-          <PrintBookCard data={item} key={item.id} />
-        ))}
+
+        <PrintBookPagination 
+          printBooks={this.state.printBooks}
+          totalPages={this.state.meta['total_pages']}
+          perPage={this.state.meta['per_page']}
+          currentPage={this.state.meta['current_page']}
+          onPageChange={this.onPageChange.bind(this)}
+        />
       </View>
     );
   }

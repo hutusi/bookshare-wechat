@@ -9169,10 +9169,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.3"
 
-taro-ui@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.npmjs.org/taro-ui/-/taro-ui-2.2.2.tgz#485847ed2ac2343c394477b25bbea439e0adc03d"
-  integrity sha512-r6UDdmJ24T4pLTjQ7cxkn63uiZ2YXEHKFAdjDL8NvbJc8WreyJUymHs/zHqCE4gWktWYkv6L2O9x8G+s94vyfw==
+taro-ui@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.npmjs.org/taro-ui/-/taro-ui-2.2.4.tgz#96a486432e86d6d0d1eda70383c47c3284f5e8e6"
+  integrity sha512-EkVxp6eWnz5QLqf89Z3OVrVBZK5bvr1RgrP5ABFNizA+sMYdjHqJRV0O07Ulmj+whGLckCF5ACeE1Q4+E7iMCg==
   dependencies:
     "@types/react" "^16.7.3"
     bind-decorator "^1.0.11"
