@@ -56,12 +56,6 @@ export default class UserProfile extends Component {
         isAuthNeeded: true
       });
     });
-    // try {
-    //   // Taro.checkSession();
-
-    // } catch(e) {
-
-    // }
   }
 
   onLogging() {
@@ -69,24 +63,7 @@ export default class UserProfile extends Component {
   }
 
   GetUserInfo(e) {
-    // console.log("xxxxx GetUserInfo xxxx", e);
-
-    user.updateUserInfo().then(result => {
-      // console.log(result)
-      this.setState({
-        userInfo: user.getInfo(),
-        loggedIn: true,
-        isAuthNeeded: false
-      });
-    }).catch(error => {
-      console.error(error);
-
-      this.setState({
-        userInfo: user.getInfo(),
-        loggedIn: false,
-        isAuthNeeded: true
-      });
-    });
+    this.tryLogin();
   }
 
   render() {
