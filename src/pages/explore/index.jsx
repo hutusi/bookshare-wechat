@@ -2,9 +2,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 
+import user from "../../services/user";
 import API from '../../services/api';
-import PrintBookCard from "../../components/printbook-card";
 import PrintBookPagination from "../../components/printbook-pagination";
+import AuthActionSheet from '../../components/auth-action-sheet';
 
 import "./index.scss";
 
@@ -12,7 +13,8 @@ export default class Explore extends Component {
 
   constructor() {
     super(...arguments);
-    this.state = { 
+    this.state = {
+      isAuthNeeded: false,
       currentTab: 0,
       sharedBooks: [],
       sharedMeta: {},
@@ -28,8 +30,12 @@ export default class Explore extends Component {
   }
 
   componentWillMount () {
-    this.fetchSharedBooks(1);
-    this.fetchBorrowableBooks(1);
+    if (user.isLoggedIn()) {
+      this.fetchSharedBooks(1);
+      this.fetchBorrowableBooks(1);
+    } else {
+      this.setState({isAuthNeeded: true});
+    }
   }
 
   componentDidMount () { }
@@ -42,6 +48,26 @@ export default class Explore extends Component {
 
   config = {
     navigationBarTitleText: '发现'
+  }
+
+  GetUserInfo(e) {
+    // console.log("xxxxx GetUserInfo xxxx", e);
+
+    user.login().then(result => {
+      // console.log(result)
+      this.setState({
+        isAuthNeeded: false
+      });
+
+      this.fetchSharedBooks(1);
+      this.fetchBorrowableBooks(1);
+    }).catch(error => {
+      console.error(error);
+
+      this.setState({
+        isAuthNeeded: true
+      });
+    });
   }
 
   fetchSharedBooks(page) {
@@ -77,7 +103,7 @@ export default class Explore extends Component {
   }
 
   onPageChange(data) {
-    console.log(data);
+    // console.log(data);
     this.fetchFuncArray[this.state.currentTab](data.current);
   }
 
@@ -122,6 +148,8 @@ export default class Explore extends Component {
             />
           </AtTabsPane>
         </AtTabs>
+
+        <AuthActionSheet isAuthNeeded={this.state.isAuthNeeded} onGetUserInfo={this.GetUserInfo.bind(this)} />
       </View>
     )
   }

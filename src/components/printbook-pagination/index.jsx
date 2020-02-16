@@ -30,7 +30,7 @@ export default class PrintBookPagination extends Component {
 
   render() {
     const { printBooks, totalPages, perPage, currentPage } = this.props;
-    console.log(totalPages, perPage, currentPage);
+    // console.log(totalPages, perPage, currentPage);
 
     return (
       <View>
