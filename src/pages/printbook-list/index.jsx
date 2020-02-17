@@ -82,7 +82,7 @@ export default class PrintBookList extends Component {
 
         <PrintBookPagination 
           printBooks={this.state.printBooks}
-          totalPages={this.state.meta['total_pages']}
+          totalCount={this.state.meta['total_count']}
           perPage={this.state.meta['per_page']}
           currentPage={this.state.meta['current_page']}
           onPageChange={this.onPageChange.bind(this)}

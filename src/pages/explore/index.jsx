@@ -132,7 +132,7 @@ export default class Explore extends Component {
           <AtTabsPane current={this.state.currentTab} index={0} >
             <PrintBookPagination 
               printBooks={this.state.sharedBooks}
-              totalPages={this.state.sharedMeta['total_pages']}
+              totalCount={this.state.sharedMeta['total_count']}
               perPage={this.state.sharedMeta['per_page']}
               currentPage={this.state.sharedMeta['current_page']}
               onPageChange={this.onPageChange.bind(this)}
@@ -141,7 +141,7 @@ export default class Explore extends Component {
           <AtTabsPane current={this.state.currentTab} index={1}>
             <PrintBookPagination 
               printBooks={this.state.borrowableBooks}
-              totalPages={this.state.borrowableMeta['total_pages']}
+              totalCount={this.state.borrowableMeta['total_count']}
               perPage={this.state.borrowableMeta['per_page']}
               currentPage={this.state.borrowableMeta['current_page']}
               onPageChange={this.onPageChange.bind(this)}

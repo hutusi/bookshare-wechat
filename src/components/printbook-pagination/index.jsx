@@ -13,7 +13,7 @@ export default class PrintBookPagination extends Component {
 
   static defaultProps = {
     printBooks: [],
-    totalPages: 1,
+    totalCount: 1,
     perPage: 1,
     currentPage: 1,
   };
@@ -24,13 +24,17 @@ export default class PrintBookPagination extends Component {
 
   componentWillMount() {}
 
+  componentDidMount() {}
+
   onPageChange(data) {
     this.props.onPageChange(data);
   }
 
   render() {
-    const { printBooks, totalPages, perPage, currentPage } = this.props;
-    // console.log(totalPages, perPage, currentPage);
+    const { printBooks } = this.props;
+    const { totalCount, perPage, currentPage } = this.props;
+    // console.log(printBooks);
+    // console.log(totalCount, perPage, currentPage);
 
     return (
       <View>
@@ -38,7 +42,7 @@ export default class PrintBookPagination extends Component {
           <PrintBookCard data={item} key={item.id} />
         ))}
         <AtPagination 
-          total={totalPages} 
+          total={totalCount} 
           pageSize={perPage} 
           current={currentPage}
           onPageChange={this.onPageChange.bind(this)}
