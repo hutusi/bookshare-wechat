@@ -1,5 +1,5 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Image, Text, Block, Label } from "@tarojs/components";
+import { View, Image, Block, Picker } from "@tarojs/components";
 import { AtForm, AtRadio, AtButton, AtTextarea } from "taro-ui";
 import moment from 'moment';
 
@@ -13,13 +13,16 @@ export default class PrintBookProperty extends Component {
   constructor() {
     super(...arguments);
     this.onPreview = this.onPreview.bind(this);
+    this.region = null;
   }
 
   state = {
+    isShowRegionSelector: true,
+    regionValue: []
   };
 
   componentWillMount () {
-    this.setState(getGlobalData('book'));
+    this.onReset();
   }
 
   componentDidMount() {
@@ -34,8 +37,14 @@ export default class PrintBookProperty extends Component {
   }
 
   onSubmit() {
-    API.put(`/print_books/${this.state.id}`, { 'description': this.state.description, 
-      'property': this.state.property }).then(res => {
+    let params = {'description': this.state.description, 'property': this.state.property}
+    console.log(this.region);
+    if (this.state.property != 'personal' && this.region) {
+      params['region'] = JSON.stringify(this.region);
+      params['region_code'] = this.region['district']['code'];
+    }
+    console.log(params);
+    API.put(`/print_books/${this.state.id}`, params).then(res => {
       // console.log(res)
       Taro.navigateBack({ delta: 1 });
     }).catch(err => {
@@ -44,13 +53,32 @@ export default class PrintBookProperty extends Component {
   }
 
   onReset() {
-    this.setState(getGlobalData('book'));
+    let book = getGlobalData('book');
+
+    this.setState(book);
+    if (book.region && book.region.province) {
+      this.setState({
+        regionValue: [
+          book.region.province['name'],
+          book.region.city['name'],
+          book.region.district['name']
+        ]
+      });
+    }
   }
 
   onSelectBookProperty(value) {
+    let showSelector = false;
+    if (value == 'personal') {
+      showSelector = false;
+    } else {
+      showSelector = true;
+    }
+
     this.setState({
-      property: value
-    })
+      property: value,
+      isShowRegionSelector: showSelector
+    });
   }
 
   onEditBookDescription(e) {
@@ -63,12 +91,26 @@ export default class PrintBookProperty extends Component {
 
   }
 
+  handleRegionChange(e) {
+    console.log(e);
+    let info = e.detail;
+    this.setState({
+      regionValue: info.value
+    });
+
+    this.region = {
+      province: { code: info.code[0], name: info.value[0] },
+      city: { code: info.code[1], name: info.value[1] },
+      district: { code: info.code[2], name: info.value[2] },
+    }
+  }
+
   config = {
     navigationBarTitleText: "藏书信息修改"
   };
 
   render() {
-    const { book, status } = this.state;
+    const { book, status, regionValue } = this.state;
 
     return (
       <View>
@@ -139,6 +181,26 @@ export default class PrintBookProperty extends Component {
                     </View>
                   </View>
                 </View> */}
+
+                {/* region selector */}
+                {this.state.isShowRegionSelector && (
+                  <View className='panel'>
+                    <View className='panel__title'>藏书所在地区</View>
+                    <View className='panel__content'>
+                      <View className='picker-item'>
+                        <Picker mode='region'
+                          onChange={this.handleRegionChange}
+                          value={regionValue}
+                        >
+                          <View className='picker-list-item'>
+                            <View className='picker-list-item__label'>选择地区</View>
+                            <View className='picker-list-item__value'>{regionValue[0]} {regionValue[1]} {regionValue[2]}</View>
+                          </View>
+                        </Picker>
+                      </View>
+                    </View>
+                  </View>
+                )}
 
                 {/* <AtButton formType='submit'>提交</AtButton>
                 <AtButton formType='reset'>重置</AtButton> */}
