@@ -12,62 +12,37 @@ export default class UserProfile extends Component {
   };
 
   static defaultProps = {
-    userInfo: {},
-    loggedIn: false,
     showArrow: true
   };
 
   constructor(props) {
     super(props);
 
+    this.updateUserInfo = this.updateUserInfo.bind(this);
+
     this.state = {
-      userInfo: user.getInfo(),
-      loggedIn: user.isLoggedIn(),
-      isAuthNeeded: false
+      userInfo: {},
+      loggedIn: false,
     };
   }
 
   componentWillMount() {
-    this.tryLogin();
+    this.updateUserInfo();
   }
 
-  // setLoginInfo() {
-  //   this.setState({
-  //     userInfo: user.getInfo(),
-  //     loggedIn: user.isLoggedIn()
-  //   });
-  // }
-
-  tryLogin() {
-    let that = this;
-    user.login().then(result => {
-      // console.log(result)
-      that.setState({
-        userInfo: user.getInfo(),
-        loggedIn: user.isLoggedIn(),
-        isAuthNeeded: false
-      });
-    }).catch(error => {
-      console.error(error);
-
-      that.setState({
-        userInfo: user.getInfo(),
-        loggedIn: false,
-        isAuthNeeded: true
-      });
+  updateUserInfo() {
+    this.setState({
+      userInfo: user.getInfo(),
+      loggedIn: user.isLoggedIn(),
     });
   }
 
-  onLogging() {
-    this.tryLogin();
-  }
-
-  GetUserInfo(e) {
-    this.tryLogin();
+  handleLoginSuccess() {
+    this.updateUserInfo()
   }
 
   render() {
-    const { userInfo, loggedIn, isAuthNeeded } = this.state;
+    const { userInfo, loggedIn } = this.state;
     return (
       <View>
         {loggedIn ? (
@@ -103,7 +78,7 @@ export default class UserProfile extends Component {
           />
         )} */}
 
-        <AuthActionSheet isAuthNeeded={isAuthNeeded} onGetUserInfo={this.GetUserInfo.bind(this)} />
+        <AuthActionSheet onLoginSuccess={this.handleLoginSuccess.bind(this)} />
       </View>
     );
   }

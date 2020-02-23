@@ -83,51 +83,14 @@ class User {
     return promise;
   }
 
-  // async login() {
-  //   console.log("start....")
-  //   if (!(this.userId && this.apiToken)) {
-  //       try {
-  //           const result = await Taro.login();
-  //           console.log(result)
-  //           const response = await API.post('/sessions/wechat', {js_code: result.code});
-  //           console.log(response)
-  //           this.userId = response.data['user_id'];
-  //           this.apiToken = response.data['api_token'];
-  //           Taro.setStorageSync('user_id', this.userId);
-  //           Taro.setStorageSync('api_token', this.apiToken);
-
-  //           const userRes = await Taro.getUserInfo();
-  //           this.userInfo = userRes.userInfo;
-  //           const putRes = await API.put('/users/' + this.userId, 
-  //             {nickname: this.userInfo.nickName,
-  //             avatar: this.userInfo.avatarUrl, gender: this.userInfo.gender, 
-  //             country: this.userInfo.country, province: this.userInfo.province,
-  //             city: this.userInfo.city, language: this.userInfo.language});
-
-  //           console.log(putRes);
-  //       } catch (err) {
-  //           console.log("login failed: " + err);
-  //       }
-  //   }
-  // }
-
   fetchInfo() {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/users/' + that.userId
         ).then(result => {
           // console.log(result.data);
-          if (result.data['nickname']) {
-            that.userInfo = result.data['user'];
-            resolve(that.userInfo);
-          } else {
-            that.updateUserInfo().then(res => {
-              resolve(res);
-            }).catch(e => {
-              console.error(e);
-              reject(e);
-            });
-          }
+          that.userInfo = result.data['user'];
+          resolve(that.userInfo);
         }).catch(err => {
           console.error(err);
           reject(err);

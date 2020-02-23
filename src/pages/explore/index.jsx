@@ -14,7 +14,6 @@ export default class Explore extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      isAuthNeeded: false,
       currentTab: 0,
       sharedBooks: [],
       sharedMeta: {},
@@ -22,6 +21,7 @@ export default class Explore extends Component {
       borrowableMeta: {},
     };
 
+    this.fetchBooks = this.fetchBooks.bind(this);
     this.fetchPrintBooks = this.fetchPrintBooks.bind(this);
     this.fetchSharedBooks = this.fetchSharedBooks.bind(this);
     this.fetchBorrowableBooks = this.fetchBorrowableBooks.bind(this);
@@ -30,12 +30,7 @@ export default class Explore extends Component {
   }
 
   componentWillMount () {
-    if (user.isLoggedIn()) {
-      this.fetchSharedBooks(1);
-      this.fetchBorrowableBooks(1);
-    } else {
-      this.setState({isAuthNeeded: true});
-    }
+    this.fetchBooks();
   }
 
   componentDidMount () { }
@@ -50,24 +45,15 @@ export default class Explore extends Component {
     navigationBarTitleText: '发现'
   }
 
-  GetUserInfo(e) {
-    // console.log("xxxxx GetUserInfo xxxx", e);
-
-    user.login().then(result => {
-      // console.log(result)
-      this.setState({
-        isAuthNeeded: false
-      });
-
+  fetchBooks() {
+    if (user.isLoggedIn()) {
       this.fetchSharedBooks(1);
       this.fetchBorrowableBooks(1);
-    }).catch(error => {
-      console.error(error);
+    }
+  }
 
-      this.setState({
-        isAuthNeeded: true
-      });
-    });
+  handleLoginSuccess() {
+    this.fetchBooks();
   }
 
   fetchSharedBooks(page) {
@@ -149,7 +135,7 @@ export default class Explore extends Component {
           </AtTabsPane>
         </AtTabs>
 
-        <AuthActionSheet isAuthNeeded={this.state.isAuthNeeded} onGetUserInfo={this.GetUserInfo.bind(this)} />
+        <AuthActionSheet onLoginSuccess={this.handleLoginSuccess.bind(this)} />
       </View>
     )
   }

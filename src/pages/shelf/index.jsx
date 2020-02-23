@@ -7,6 +7,8 @@ import API from '../../services/api';
 import Panel from '../../components/panel';
 import HorizonList from '../../components/horizon-list';
 import URL from "../../constants/urls";
+import user from "../../services/user";
+import AuthActionSheet from '../../components/auth-action-sheet';
 
 import './index.scss'
 
@@ -38,7 +40,15 @@ export default class Shelf extends Component {
     navigationBarTitleText: '书架'
   }
 
+  handleLoginSuccess() {
+    this.refresh();
+  }
+
   refresh() {
+    if (!user.isLoggedIn()) {
+      return;
+    }
+
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/shelfs/summary').then(res => {
@@ -244,6 +254,8 @@ export default class Shelf extends Component {
             <Button onClick={this.onIsbnConfirm.bind(this)}>确定</Button> 
           </AtModalAction>
         </AtModal>
+
+        <AuthActionSheet onLoginSuccess={this.handleLoginSuccess.bind(this)} />
       </View>
     )
   }
