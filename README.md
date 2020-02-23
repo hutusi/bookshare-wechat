@@ -25,3 +25,4 @@ https://taro-ui.aotu.io/#/docs/introduction
 - [ ] 登录优化
 - [ ] 给图书打标签
 - [ ] 生成分享图片
+- [ ] 搜索

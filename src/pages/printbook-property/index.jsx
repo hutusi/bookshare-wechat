@@ -1,6 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Image, Block, Picker } from "@tarojs/components";
-import { AtForm, AtRadio, AtButton, AtTextarea } from "taro-ui";
+import { AtMessage, AtForm, AtRadio, AtButton, AtTextarea } from "taro-ui";
 import moment from 'moment';
 
 import API from '../../services/api';
@@ -36,12 +36,24 @@ export default class PrintBookProperty extends Component {
     });
   }
 
+  isPersonalProperty(property) {
+    return property == 'personal';
+  }
+
   onSubmit() {
     let params = {'description': this.state.description, 'property': this.state.property}
-    console.log(this.region);
-    if (this.state.property != 'personal' && this.region) {
-      params['region'] = JSON.stringify(this.region);
-      params['region_code'] = this.region['district']['code'];
+    // console.log(this.region);
+    if (!this.isPersonalProperty(this.state.property)) {
+      if (this.region) {
+        params['region'] = JSON.stringify(this.region);
+        params['region_code'] = this.region['district']['code'];
+      } else {
+        Taro.atMessage({
+          'message': '共享/借阅图书请选择藏书所在区域!',
+          'type': 'warning',
+        });
+        return;
+      }      
     }
     console.log(params);
     API.put(`/print_books/${this.state.id}`, params).then(res => {
@@ -56,7 +68,14 @@ export default class PrintBookProperty extends Component {
     let book = getGlobalData('book');
 
     this.setState(book);
+    this.setState({isShowRegionSelector: !this.isPersonalProperty(book.property)});
+
+    let userInfo = user.getInfo();
+    console.log(book.region);
+    console.log(userInfo.region);
+
     if (book.region && book.region.province) {
+      this.region = book.region;
       this.setState({
         regionValue: [
           book.region.province['name'],
@@ -64,12 +83,23 @@ export default class PrintBookProperty extends Component {
           book.region.district['name']
         ]
       });
+    } else if (userInfo.region && userInfo.region.province) {
+      this.region = userInfo.region;
+      this.setState({
+        regionValue: [
+          userInfo.region.province['name'],
+          userInfo.region.city['name'],
+          userInfo.region.district['name']
+        ]
+      });
+    } else {
+
     }
   }
 
   onSelectBookProperty(value) {
     let showSelector = false;
-    if (value == 'personal') {
+    if (this.isPersonalProperty(value)) {
       showSelector = false;
     } else {
       showSelector = true;
@@ -114,6 +144,8 @@ export default class PrintBookProperty extends Component {
 
     return (
       <View>
+        <AtMessage />
+
         {book && (
           <Block>
             <View className='at-row at-row__align--start book'>
