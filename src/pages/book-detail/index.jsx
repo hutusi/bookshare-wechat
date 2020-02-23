@@ -1,20 +1,20 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Image, Text, Block } from "@tarojs/components";
+import { View, Block } from "@tarojs/components";
 import { AtActivityIndicator, AtButton, AtFloatLayout, AtTextarea } from "taro-ui";
-import moment from 'moment';
 
 import API from '../../services/api';
 import NetworkError from "../../components/network-error";
 import HorizonList from "../../components/horizon-list";
 
-import "./index.scss";
+import BookPreviewHeader from "../../components/book-preview-header";
 import user from "../../services/user";
+
+import "./index.scss";
 
 export default class BookDetail extends Component {
 
   constructor() {
     super(...arguments);
-    this.onPreview = this.onPreview.bind(this);
     this.onReload = this.onReload.bind(this);
     this.onPopUp = this.onPopUp.bind(this);
     this.ownBook = this.ownBook.bind(this);
@@ -35,14 +35,6 @@ export default class BookDetail extends Component {
 
   onReload() {
     this.loadBook();
-  }
-
-  onPreview() {
-    let { cover } = this.state.book.book;
-    Taro.previewImage({
-      current: cover,
-      urls: [cover]
-    });
   }
 
   loadBook() {
@@ -127,21 +119,8 @@ export default class BookDetail extends Component {
       <View>
         {!isFetching && !isError && (
           <Block>
-            <View className='at-row at-row__align--start book'>
-              <View className='at-col book__info'>
-                <View className='book__info-title'>{book.title}</View>
-                <View>作者：{book.author_name}</View>
-                <View>出版社：{book.publisher_name}</View>
-                <View>出版日期：{moment(book.pubdate).format('YYYY-MM-DD')}</View>
-                <View>ISBN：{book.isbn}</View>
-              </View>
-              <Image
-                className='at-col at-col--auto book__img'
-                src={book.cover}
-                mode='widthFix'
-                onClick={this.onPreview}
-              />
-            </View>
+            <BookPreviewHeader book={book} />
+            
             <View className='book-introduction'>
               <View className='book-introduction__title'>简介与目录</View>
               <View className='book-introduction__content'>

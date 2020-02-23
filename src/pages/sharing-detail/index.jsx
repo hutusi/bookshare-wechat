@@ -1,8 +1,9 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Image, Text, Block, Label } from "@tarojs/components";
+import { View, Block, Label } from "@tarojs/components";
 import { AtForm, AtRadio, AtButton, AtTextarea } from "taro-ui";
 import moment from 'moment';
 
+import BookPreviewHeader from "../../components/book-preview-header";
 import API from '../../services/api';
 import user from '../../services/user';
 
@@ -11,7 +12,6 @@ import "./index.scss";
 export default class SharingDetail extends Component {
   constructor() {
     super(...arguments);
-    this.onPreview = this.onPreview.bind(this);
     this.fetchInfo = this.fetchInfo.bind(this);
     this.getSubmit = this.getSubmit.bind(this);
   }
@@ -129,14 +129,6 @@ export default class SharingDetail extends Component {
     });
   }
 
-  onPreview() {
-    let { cover } = this.state.book.book;
-    Taro.previewImage({
-      current: cover,
-      urls: [cover]
-    });
-  }
-
   config = {
     navigationBarTitleText: "借书/分享申请"
   };
@@ -148,21 +140,12 @@ export default class SharingDetail extends Component {
       <View>
         {book && (
           <Block>
-            <View className='at-row at-row__align--start book'>
-              <View className='at-col book__info'>
-                <View className='book__info-title'>{book.title}</View>
-                <View>作者：{book.author_name}</View>
-                <View>出版社：{book.publisher_name}</View>
+            <BookPreviewHeader book={book} />
+
+            <View className='book-introduction'>
                 <View>申请借书人：{receiver.nickname}</View>
                 <View>申请状态：{this.state.status}</View>
                 <View>申请时间：{moment(created_at).format('YYYY-MM-DD hh:mm:ss')}</View>
-              </View>
-              <Image
-                className='at-col at-col--auto book__img'
-                src={book.cover}
-                mode='widthFix'
-                onClick={this.onPreview}
-              />
             </View>
 
             <View className='doc-body'>
