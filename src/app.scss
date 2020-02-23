@@ -50,6 +50,25 @@ page {
   }
 }
 
+.book-extra {
+  box-sizing: border-box;
+  padding: $spacing-v-xl $spacing-h-xl;
+  background: $color-white;
+  @include hairline-top;
+
+  &__title {
+    font-size: $font-size-lg;
+    color: $color-text-base;
+  }
+
+  &__info {
+    margin-top: $spacing-v-md;
+    font-size: 28px;
+    line-height: 1.7em;
+    color: $color-grey-1;
+  }
+}
+
 .book-introduction,
 .related-books {
   // margin-top: $spacing-v-md;

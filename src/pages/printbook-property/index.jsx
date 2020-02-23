@@ -131,7 +131,7 @@ export default class PrintBookProperty extends Component {
   };
 
   render() {
-    const { book, status, regionValue } = this.state;
+    const { book, region, holder, regionValue } = this.state;
 
     return (
       <View>
@@ -140,6 +140,14 @@ export default class PrintBookProperty extends Component {
         {book && (
           <Block>
             <BookPreviewHeader book={book} />
+
+            <View className='book-extra'>
+              <View className='book-extra__title'>藏书信息</View>
+              <View className='at-col book-extra__info'>
+                <View>藏书持有人：{holder.nickname}</View>
+                <View>藏书位置：{region.province['name']} {region.city['name']} {region.district['name']}</View>
+              </View>
+            </View>
 
             {/* <AtForm
               onSubmit={this.onSubmit.bind(this)}

@@ -138,6 +138,14 @@ export default class PrintBookDetail extends Component {
           <Block>
             <BookPreviewHeader book={book.book} />
 
+            <View className='book-extra'>
+              <View className='book-extra__title'>藏书信息</View>
+              <View className='at-col book-extra__info'>
+                <View>藏书持有人：{book.holder.nickname}</View>
+                <View>藏书位置：{book.region.province['name']} {book.region.city['name']} {book.region.district['name']}</View>
+              </View>
+            </View>
+
             <View className='book-introduction'>
               <View className='book-introduction__title'>简介与目录</View>
               <View className='book-introduction__content'>

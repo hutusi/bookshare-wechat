@@ -134,7 +134,7 @@ export default class SharingDetail extends Component {
   };
 
   render() {
-    const { book, receiver, holder, created_at } = this.state;
+    const { book, print_book, receiver, holder, created_at } = this.state;
 
     return (
       <View>
@@ -142,10 +142,21 @@ export default class SharingDetail extends Component {
           <Block>
             <BookPreviewHeader book={book} />
 
-            <View className='book-introduction'>
+            <View className='book-extra'>
+              <View className='book-extra__title'>藏书信息</View>
+              <View className='at-col book-extra__info'>
+                <View>藏书持有人：{print_book.holder.nickname}</View>
+                <View>藏书位置：{print_book.region.province['name']} {print_book.region.city['name']} {print_book.region.district['name']}</View>
+              </View>
+            </View>
+
+            <View className='book-extra'>
+              <View className='book-extra__title'>借阅申请信息</View>
+              <View className='at-col book-extra__info'>
                 <View>申请借书人：{receiver.nickname}</View>
                 <View>申请状态：{this.state.status}</View>
                 <View>申请时间：{moment(created_at).format('YYYY-MM-DD hh:mm:ss')}</View>
+              </View>
             </View>
 
             <View className='doc-body'>

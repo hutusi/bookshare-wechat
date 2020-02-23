@@ -53,7 +53,7 @@ export default class PrintBookCard extends Component {
             <View>出版社：{data.book.publisher_name}</View>
             <View>出版日期：{moment(data.book.pubdate).format('YYYY-MM-DD')}</View>
             <View>ISBN：{data.book.isbn}</View>
-            <View>状态：{data.status}</View>
+            <View>地点：{data.region.city['name']} {data.region.district['name']}</View>
           </View>
         )}
         {showArrow && (
