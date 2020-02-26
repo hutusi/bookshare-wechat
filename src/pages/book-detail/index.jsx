@@ -109,6 +109,18 @@ export default class BookDetail extends Component {
   //   }
   // }
 
+  onShareAppMessage (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    let id = this.$router.params.id;
+    return {
+      title: '共享图书馆',
+      path: `pages/book-detail/index?id=${id}`
+    }
+  }
+
   config = {
     navigationBarTitleText: "图书详情"
   };
@@ -120,7 +132,7 @@ export default class BookDetail extends Component {
         {!isFetching && !isError && (
           <Block>
             <BookPreviewHeader book={book} />
-            
+
             <View className='book-introduction'>
               <View className='book-introduction__title'>简介与目录</View>
               <View className='book-introduction__content'>

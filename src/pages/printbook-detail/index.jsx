@@ -124,6 +124,18 @@ export default class PrintBookDetail extends Component {
     })
   }
 
+  onShareAppMessage (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    let id = this.$router.params.id;
+    return {
+      title: '共享图书馆',
+      path: `pages/printbook-detail/index?id=${id}`
+    }
+  }
+
   config = {
     navigationBarTitleText: "藏书详情"
   };

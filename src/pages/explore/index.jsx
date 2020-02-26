@@ -45,6 +45,17 @@ export default class Explore extends Component {
     navigationBarTitleText: '发现'
   }
 
+  onShareAppMessage (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '共享图书馆',
+      path: '/pages/explore/index'
+    }
+  }
+
   fetchBooks() {
     if (user.isLoggedIn()) {
       this.fetchSharedBooks(1);
