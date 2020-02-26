@@ -105,10 +105,10 @@ export default class Dashboard extends Component {
 
         <UserProfile />
 
-        <AccordionList title='待确认共享' data={this.state.approvingSharings} />
-        <AccordionList title='申请共享' data={this.state.requestingSharings} />
-        <AccordionList title='待确认借出' data={this.state.approvingBorrowings} />
-        <AccordionList title='申请借入' data={this.state.requestingBorrowings} />
+        <AccordionList title='待确认共享' sharingType='sharing' data={this.state.approvingSharings} />
+        <AccordionList title='申请共享' sharingType='sharing' data={this.state.requestingSharings} />
+        <AccordionList title='待确认借出' sharingType='borrowing' data={this.state.approvingBorrowings} />
+        <AccordionList title='申请借入' sharingType='borrowing' data={this.state.requestingBorrowings} />
 
       </View>
     )

@@ -13,6 +13,7 @@ export default class AccordionList extends Component {
 
   static defaultProps = {
     title: '',
+    sharingType: 'sharing',
     data: [],
   };
 
@@ -33,7 +34,7 @@ export default class AccordionList extends Component {
   }
 
   onClickItem(sharingId) {
-    Taro.navigateTo({'url': `${URL.SHARING_DETAIL}?id=${sharingId}`});
+    Taro.navigateTo({'url': `${URL.SHARING_DETAIL}?id=${sharingId}&type=${this.props.sharingType}`});
   }
 
   render() {

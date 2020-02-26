@@ -29,11 +29,12 @@ export default class SharingDetail extends Component {
 
   fetchInfo() {
     this.sharingId = this.$router.params.id;
+    this.sharingType = this.$router.params.type;
 
-    API.get(`/sharings/${this.sharingId}`).then(res => {
+    API.get(`/${this.sharingType}s/${this.sharingId}`).then(res => {
       console.log(res, user.userId)
       this.originReply = res.data.application_reply;
-      let stateData = res.data['sharing'];
+      let stateData = res.data[this.sharingType];
       stateData['submitButton'] = this.getSubmit(stateData);
       this.setState(stateData);
     }).catch(err => {
