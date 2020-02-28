@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtMessage, AtAccordion, AtList, AtListItem  } from 'taro-ui'
+import { AtMessage, AtDivider  } from 'taro-ui'
 
 import URL from "../../constants/urls";
 import API from '../../services/api';
@@ -109,6 +109,8 @@ export default class Dashboard extends Component {
         <AccordionList title='申请共享' sharingType='sharing' data={this.state.requestingSharings} />
         <AccordionList title='待确认借出' sharingType='borrowing' data={this.state.approvingBorrowings} />
         <AccordionList title='申请借入' sharingType='borrowing' data={this.state.requestingBorrowings} />
+
+        <AtDivider content='只买书 v1.3.2' fontColor='#696969' />
 
       </View>
     )
