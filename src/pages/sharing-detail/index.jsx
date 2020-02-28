@@ -12,6 +12,10 @@ import "./index.scss";
 export default class SharingDetail extends Component {
   constructor() {
     super(...arguments);
+
+    this.sharingId = this.$router.params.id;
+    this.sharingType = this.$router.params.type;
+
     this.fetchInfo = this.fetchInfo.bind(this);
     this.getSubmit = this.getSubmit.bind(this);
   }
@@ -28,9 +32,6 @@ export default class SharingDetail extends Component {
   }
 
   fetchInfo() {
-    this.sharingId = this.$router.params.id;
-    this.sharingType = this.$router.params.type;
-
     API.get(`/${this.sharingType}s/${this.sharingId}`).then(res => {
       console.log(res, user.userId)
       this.originReply = res.data.application_reply;
@@ -67,6 +68,10 @@ export default class SharingDetail extends Component {
         submitButton.visible = true;
         submitButton.text = '书已借出';
         submitButton.onClick = this.onSubmitLend.bind(this);
+      } else if (sharing.status == 'returning'){
+        submitButton.visible = true;
+        submitButton.text = '书已收到';
+        submitButton.onClick = this.onSubmitConfirmReturn.bind(this);
       } else {
       }
     } else if (sharing.receiver_id == user.userId) {
@@ -74,6 +79,10 @@ export default class SharingDetail extends Component {
         submitButton.visible = true;
         submitButton.text = '书已收到';
         submitButton.onClick = this.onSubmitBorrow.bind(this);
+      } else if (sharing.status == 'borrowing' && this.sharingType == 'borrowing') {
+        submitButton.visible = true;
+        submitButton.text = '书已归还';
+        submitButton.onClick = this.onSubmitReturn.bind(this);
       } else {
       }
     } else {
@@ -84,7 +93,7 @@ export default class SharingDetail extends Component {
 
   onSubmitAcceptReject() {
     let action = this.state.sharingAction;
-    API.post(`/sharings/${this.state.id}/${action}`, { 'application_reply': this.state.application_reply}
+    API.post(`/${this.sharingType}s/${this.state.id}/${action}`, { 'application_reply': this.state.application_reply}
             ).then(res => {
       // console.log(res)
       Taro.navigateBack({ delta: 1 });
@@ -98,7 +107,7 @@ export default class SharingDetail extends Component {
   }
 
   onSubmitLend() {
-    API.post(`/sharings/${this.state.id}/lend`).then(res => {
+    API.post(`/${this.sharingType}s/${this.state.id}/lend`).then(res => {
       // console.log(res)
       Taro.navigateBack({ delta: 1 });
     }).catch(err => {
@@ -111,7 +120,33 @@ export default class SharingDetail extends Component {
   }
 
   onSubmitBorrow() {
-    API.post(`/sharings/${this.state.id}/borrow`).then(res => {
+    API.post(`/${this.sharingType}s/${this.state.id}/borrow`).then(res => {
+      // console.log(res)
+      Taro.navigateBack({ delta: 1 });
+    }).catch(err => {
+      console.error(err);
+      Taro.atMessage({
+        'message': err,
+        'type': 'warning',
+      })
+    });
+  }
+
+  onSubmitReturn() {
+    API.post(`/${this.sharingType}s/${this.state.id}/return`).then(res => {
+      // console.log(res)
+      Taro.navigateBack({ delta: 1 });
+    }).catch(err => {
+      console.error(err);
+      Taro.atMessage({
+        'message': err,
+        'type': 'warning',
+      })
+    });
+  }
+
+  onSubmitConfirmReturn() {
+    API.post(`/${this.sharingType}s/${this.state.id}/finish`).then(res => {
       // console.log(res)
       Taro.navigateBack({ delta: 1 });
     }).catch(err => {
