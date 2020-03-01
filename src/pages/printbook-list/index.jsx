@@ -1,9 +1,9 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View } from "@tarojs/components";
-import { AtMessage, AtNoticebar } from "taro-ui";
+import { AtMessage, AtSearchBar } from "taro-ui";
 
+import URL from "../../constants/urls";
 import API from '../../services/api';
-import PrintBookCard from "../../components/printbook-card";
 import PrintBookPagination from "../../components/printbook-pagination";
 
 import "./index.scss";
@@ -15,6 +15,9 @@ export default class PrintBookList extends Component {
     this.state = { 
       printBooks: [],
       meta: {},
+
+      initSearchValue: '',
+      personalSearchValue: '',
     };
     this.onFetchBooks = this.onFetchBooks.bind(this);
   }
@@ -71,6 +74,19 @@ export default class PrintBookList extends Component {
     this.onFetchBooks(data.current);
   }
 
+  handleSearchBarChange(searchValue, value) {
+    // console.log(value, searchValue);
+    this.setState({
+      [searchValue]: value
+    })
+  }
+
+  handleSearchBarActionClick(property, searchValue) {
+    let keyword = encodeURIComponent(this.state[searchValue].trim());
+    console.log(keyword);
+    Taro.navigateTo({'url': `${URL.PRINT_BOOK_SEARCH}?property=${property}&keyword=${keyword}`});
+  }
+
   config = {
     navigationBarTitleText: ""
   };
@@ -79,6 +95,13 @@ export default class PrintBookList extends Component {
     return (
       <View>
         <AtMessage />
+
+        <AtSearchBar
+          value={this.state.initSearchValue}
+          onChange={this.handleSearchBarChange.bind(this, 'personalSearchValue')}
+          onActionClick={this.handleSearchBarActionClick.bind(this, 'personal', 'personalSearchValue')}
+          onConfirm={this.handleSearchBarActionClick.bind(this, 'personal', 'personalSearchValue')}
+        />
 
         <PrintBookPagination 
           printBooks={this.state.printBooks}

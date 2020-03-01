@@ -1,7 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtTabs, AtTabsPane } from 'taro-ui'
+import { AtTabs, AtTabsPane, AtSearchBar } from 'taro-ui'
 
+import URL from "../../constants/urls";
 import user from "../../services/user";
 import API from '../../services/api';
 import PrintBookPagination from "../../components/printbook-pagination";
@@ -19,6 +20,10 @@ export default class Explore extends Component {
       sharedMeta: {},
       borrowableBooks: [],
       borrowableMeta: {},
+
+      initSearchValue: '',
+      sharedSearchValue: '',
+      borrowableSearchValue: '',
     };
 
     this.fetchBooks = this.fetchBooks.bind(this);
@@ -120,6 +125,19 @@ export default class Explore extends Component {
     })
   }
 
+  handleSearchBarChange(searchValue, value) {
+    // console.log(value, searchValue);
+    this.setState({
+      [searchValue]: value
+    })
+  }
+
+  handleSearchBarActionClick(property, searchValue) {
+    let keyword = encodeURIComponent(this.state[searchValue].trim());
+    console.log(keyword);
+    Taro.navigateTo({'url': `${URL.PRINT_BOOK_SEARCH}?property=${property}&keyword=${keyword}`});
+  }
+
   render () {
     const tabList = [{ title: '共享' }, { title: '借阅' }];
 
@@ -127,6 +145,12 @@ export default class Explore extends Component {
       <View className='explore'>
         <AtTabs className='at-tabs' current={this.state.currentTab} tabList={tabList} onClick={this.handleClick.bind(this)}>
           <AtTabsPane current={this.state.currentTab} index={0} >
+            <AtSearchBar
+              value={this.state.initSearchValue}
+              onChange={this.handleSearchBarChange.bind(this, 'sharedSearchValue')}
+              onActionClick={this.handleSearchBarActionClick.bind(this, 'shared', 'sharedSearchValue')}
+              onConfirm={this.handleSearchBarActionClick.bind(this, 'shared', 'sharedSearchValue')}
+            />
             <PrintBookPagination 
               printBooks={this.state.sharedBooks}
               totalCount={this.state.sharedMeta['total_count']}
@@ -136,6 +160,12 @@ export default class Explore extends Component {
             />
           </AtTabsPane>
           <AtTabsPane current={this.state.currentTab} index={1}>
+            <AtSearchBar
+              value={this.state.initSearchValue}
+              onChange={this.handleSearchBarChange.bind(this, 'borrowableSearchValue')}
+              onActionClick={this.handleSearchBarActionClick.bind(this, 'borrowable', 'borrowableSearchValue')}
+              onConfirm={this.handleSearchBarActionClick.bind(this, 'borrowable', 'borrowableSearchValue')}
+            />
             <PrintBookPagination 
               printBooks={this.state.borrowableBooks}
               totalCount={this.state.borrowableMeta['total_count']}

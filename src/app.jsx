@@ -22,6 +22,7 @@ class App extends Component {
 
       'pages/book-detail/index',
       'pages/printbook-property/index',
+      'pages/printbook-search/index',
       'pages/sharing-detail/index',
     ],
     window: {
