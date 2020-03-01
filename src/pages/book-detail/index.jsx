@@ -158,7 +158,7 @@ export default class BookDetail extends Component {
                 height={400}
                 placeholder='添加备注...'
               />
-              <AtButton type='primary' onClick={this.ownBook}>拥有此书</AtButton> 
+              <AtButton type='primary' onClick={this.ownBook}>我有此书</AtButton> 
             </AtFloatLayout>
           </Block>
         )}

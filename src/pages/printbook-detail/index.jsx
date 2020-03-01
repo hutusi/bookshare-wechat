@@ -1,6 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Block } from "@tarojs/components";
-import { AtMessage, AtActivityIndicator, AtButton, AtFloatLayout, AtTextarea } from "taro-ui";
+import { View, Block, Text } from "@tarojs/components";
+import { AtMessage, AtActivityIndicator, AtButton, AtFloatLayout, AtTextarea, AtActionSheet, AtActionSheetItem } from "taro-ui";
 
 import URL from "../../constants/urls";
 import API from '../../services/api';
@@ -25,7 +25,8 @@ export default class PrintBookDetail extends Component {
     isFetching: true,
     isError: false,
     mainButton: null,
-    isApplyFloatLayoutOpened: false
+    isOpenedApplyPopup: false,
+    isOpenedDeleteAction: false,
   };
 
   componentDidMount() {
@@ -85,7 +86,7 @@ export default class PrintBookDetail extends Component {
 
   onClickApply() {
     this.setState({
-      isApplyFloatLayoutOpened: true
+      isOpenedApplyPopup: true
     })
   }
 
@@ -113,7 +114,7 @@ export default class PrintBookDetail extends Component {
       console.error(err);
     }).finally(() => {
       this.setState({
-        isApplyFloatLayoutOpened: false
+        isOpenedApplyPopup: false
       });
     });
   }
@@ -134,6 +135,41 @@ export default class PrintBookDetail extends Component {
       title: '共享图书馆',
       path: `pages/printbook-detail/index?id=${id}`
     }
+  }
+
+  handleDeleteButtonClick() {
+    this.setState({
+      isOpenedDeleteAction: true
+    });
+  }
+
+  handleCancel(name) {
+    this.setState({
+      [ `isOpened${name}` ]: false
+    });
+  }
+
+  handleClose(name) {
+    this.setState({
+      [ `isOpened${name}` ]: false
+    });
+  }
+
+  handleDeleteActionClick() {
+    API.delete(`/print_books/${this.state.book.id}`).then(res => {
+      // console.log(res.data)
+      Taro.atMessage({
+        'message': '删除成功！',
+        'type': 'success',
+      });
+      Taro.navigateBack({ delta: 1 });
+    }).catch(err => {
+      console.error(err);
+    }).finally(() => {
+      this.setState({
+        isOpenedDeleteAction: false
+      });
+    });    
   }
 
   config = {
@@ -183,7 +219,25 @@ export default class PrintBookDetail extends Component {
         {mainButton && mainButton.visible && (
           <AtButton type='primary' onClick={mainButton.onClick} >{mainButton.text}</AtButton>
         )}
-        <AtFloatLayout isOpened={this.state.isApplyFloatLayoutOpened} title='预约借书' >
+
+        {book.property == 'personal' && book.owner_id == user.userId && (
+          <View>
+            <AtButton onClick={this.handleDeleteButtonClick.bind(this)} >删除</AtButton>
+            <AtActionSheet
+              isOpened={this.state.isOpenedDeleteAction}
+              cancelText='取消'
+              title='删除藏书后此藏书备注等信息将不可恢复'
+              onCancel={this.handleCancel.bind(this, 'DeleteAction')} 
+              onClose={this.handleClose.bind(this, 'DeleteAction')} 
+            >
+              <AtActionSheetItem onClick={this.handleDeleteActionClick.bind(this)} >
+                <Text className='danger'>确认删除</Text>
+              </AtActionSheetItem>
+            </AtActionSheet>
+          </View>
+        )}
+
+        <AtFloatLayout isOpened={this.state.isOpenedApplyPopup} title='预约借书' >
           <AtTextarea
             value={this.state.value}
             onChange={this.onApplicationReasonChange.bind(this)}
