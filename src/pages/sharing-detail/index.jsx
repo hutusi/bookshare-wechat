@@ -6,6 +6,7 @@ import moment from 'moment';
 import BookPreviewHeader from "../../components/book-preview-header";
 import API from '../../services/api';
 import user from '../../services/user';
+import translate from '../../services/translator';
 
 import "./index.scss";
 
@@ -190,7 +191,7 @@ export default class SharingDetail extends Component {
               <View className='book-extra__title'>借阅申请信息</View>
               <View className='at-col book-extra__info'>
                 <View>申请借书人：{receiver.nickname}</View>
-                <View>申请状态：{this.state.status}</View>
+                <View>申请状态：{translate(this.state.status)}</View>
                 <View>申请时间：{moment(created_at).format('YYYY-MM-DD hh:mm:ss')}</View>
               </View>
             </View>

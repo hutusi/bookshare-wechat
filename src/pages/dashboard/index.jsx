@@ -7,6 +7,7 @@ import API from '../../services/api';
 import user from '../../services/user';
 import UserProfile from '../../components/user-profile';
 import AccordionList from '../../components/accordion-list';
+import translate from '../../services/translator';
 
 import bookPng from '../../assets/icons/book.png'
 
@@ -65,7 +66,7 @@ export default class Dashboard extends Component {
       items.push({
         id: element.id,
         title: element.book.title,
-        note: element.status + ' - ' + element.receiver.nickname,
+        note: translate(element.status) + ' - ' + element.receiver.nickname,
         thumb: bookPng,
       });
     });
@@ -78,7 +79,7 @@ export default class Dashboard extends Component {
       items.push({
         id: element.id,
         title: element.book.title,
-        note: element.status + ' - ' + element.holder.nickname,
+        note: translate(element.status) + ' - ' + element.holder.nickname,
         thumb: bookPng,
       });
     });
