@@ -16,7 +16,7 @@ https://taro-ui.aotu.io/#/docs/introduction
 
 ## TODO
 
-- [ ] 中文状态显示
+- [X] 中文状态显示
 - [X] 分页
 - [ ] 上拉获取下页
 - [ ] API code 抛异常，message 显示报错信息
@@ -25,5 +25,8 @@ https://taro-ui.aotu.io/#/docs/introduction
 - [ ] 登录优化
 - [ ] 给图书打标签
 - [ ] 生成分享图片
-- [ ] 搜索
-- [ ] 分享首页
+- [X] 搜索藏书
+- [ ] 图书展示页面(第二个tab)
+- [ ] 搜索图书
+- [X] 分享首页
+- [X] 删除藏书

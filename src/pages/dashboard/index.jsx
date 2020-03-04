@@ -111,7 +111,7 @@ export default class Dashboard extends Component {
         <AccordionList title='待确认借出' sharingType='borrowing' data={this.state.approvingBorrowings} />
         <AccordionList title='申请借入' sharingType='borrowing' data={this.state.requestingBorrowings} />
 
-        <AtDivider content='只买书 v1.3.2' fontColor='#696969' />
+        <AtDivider content='只买书 v1.4.0' fontColor='#696969' />
 
       </View>
     )
