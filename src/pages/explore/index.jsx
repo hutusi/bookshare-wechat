@@ -139,7 +139,7 @@ export default class Explore extends Component {
   }
 
   render () {
-    const tabList = [{ title: '共享' }, { title: '借阅' }];
+    const tabList = [{ title: '共享书库' }, { title: '借阅图书' }];
 
     return (
       <View className='explore'>

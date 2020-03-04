@@ -161,8 +161,8 @@ export default class Shelf extends Component {
             weight--;
         }
         check = 11 - (sum % 11);
-        if (check == 10) {
-            check = 'X';
+        if (check >= 10) {
+            check = '0';
         }
         return (check == str[str.length-1].toUpperCase());
     }
