@@ -40,13 +40,13 @@ export default class PrintBookProperty extends Component {
         params['region_code'] = this.region['district']['code'];
       } else {
         Taro.atMessage({
-          'message': '共享/借阅图书请选择藏书所在区域!',
+          'message': '共享图书请选择藏书所在区域!',
           'type': 'warning',
         });
         return;
       }      
     }
-    console.log(params);
+    // console.log(params);
     API.put(`/print_books/${this.state.id}`, params).then(res => {
       // console.log(res)
       Taro.navigateBack({ delta: 1 });
@@ -62,8 +62,8 @@ export default class PrintBookProperty extends Component {
     this.setState({isShowRegionSelector: !this.isPersonalProperty(book.property)});
 
     let userInfo = user.getInfo();
-    console.log(book.region);
-    console.log(userInfo.region);
+    // console.log(book.region);
+    // console.log(userInfo.region);
 
     if (book.region && book.region.province) {
       this.region = book.region;
@@ -144,8 +144,8 @@ export default class PrintBookProperty extends Component {
             <View className='book-extra'>
               <View className='book-extra__title'>藏书信息</View>
               <View className='at-col book-extra__info'>
-                <View>藏书持有人：{holder.nickname}</View>
-                <View>藏书位置：{region.province['name']} {region.city['name']} {region.district['name']}</View>
+                <View>持有人：{holder.nickname}</View>
+                <View>位置：{region.province['name']} {region.city['name']} {region.district['name']}</View>
               </View>
             </View>
 
@@ -175,7 +175,6 @@ export default class PrintBookProperty extends Component {
                     <AtRadio
                       options={[
                         { label: '共享图书', value: 'shared' },
-                        { label: '可供借阅', value: 'borrowable' },
                         { label: '私有藏书', value: 'personal' }
                       ]}
                       value={this.state.property}

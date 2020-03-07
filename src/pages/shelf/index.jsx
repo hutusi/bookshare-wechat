@@ -16,8 +16,6 @@ export default class Shelf extends Component {
 
   state = {
     sharedBooks: [],
-    lentBooks: [],
-    borrowedBooks: [],
     receivedBooks: [],
     personalBooks: [],
     isbnInputOpened: false,
@@ -37,7 +35,7 @@ export default class Shelf extends Component {
   componentDidHide () { }
 
   config = {
-    navigationBarTitleText: '书架'
+    navigationBarTitleText: '个人书架'
   }
 
   handleLoginSuccess() {
@@ -52,10 +50,8 @@ export default class Shelf extends Component {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/shelfs/summary').then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         that.setState({sharedBooks: res.data['shared']})
-        that.setState({lentBooks: res.data['lent']})
-        that.setState({borrowedBooks: res.data['borrowed']})
         that.setState({receivedBooks: res.data['received']})
         that.setState({personalBooks: res.data['personal']})
 
@@ -201,26 +197,6 @@ export default class Shelf extends Component {
             className='panel--first'
           >
             <HorizonList data={this.state.receivedBooks} />
-          </Panel>
-        }
-
-        {this.state.lentBooks.length > 0 &&
-          <Panel
-            url={`${URL.PRINT_BOOK_LIST}?type=lentBooks`}
-            title='我的借出'
-            className='panel--first'
-          >
-            <HorizonList data={this.state.lentBooks} />
-          </Panel>
-        }
-
-        {this.state.borrowedBooks.length > 0 &&
-          <Panel
-            url={`${URL.PRINT_BOOK_LIST}?type=borrowedBooks`}
-            title='我的借入'
-            className='panel--first'
-          >
-            <HorizonList data={this.state.borrowedBooks} />
           </Panel>
         }
 

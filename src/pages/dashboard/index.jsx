@@ -21,8 +21,6 @@ export default class Dashboard extends Component {
     this.state = {
       approvingSharings: [],
       requestingSharings: [],
-      approvingBorrowings: [],
-      requestingBorrowings: []
     }
 
     this.onFetchDashboard = this.onFetchDashboard.bind(this);
@@ -44,12 +42,10 @@ export default class Dashboard extends Component {
     let that = this;
     const promise = new Promise(function(resolve, reject) {
       API.get('/dashboard').then(apiRes => {
-        console.log(apiRes.data);
+        // console.log(apiRes.data);
         that.setState({
           approvingSharings: that.toApprovingItems(apiRes.data['approving_sharings']),
           requestingSharings: that.toRequestingItems(apiRes.data['requesting_sharings']),
-          approvingBorrowings: that.toApprovingItems(apiRes.data['approving_borrowings']),
-          requestingBorrowings: that.toRequestingItems(apiRes.data['requesting_borrowings']),
         });
         resolve(apiRes.data);
       }).catch(apiErr => {
@@ -108,8 +104,6 @@ export default class Dashboard extends Component {
 
         <AccordionList title='待确认共享' sharingType='sharing' data={this.state.approvingSharings} />
         <AccordionList title='申请共享' sharingType='sharing' data={this.state.requestingSharings} />
-        <AccordionList title='待确认借出' sharingType='borrowing' data={this.state.approvingBorrowings} />
-        <AccordionList title='申请借入' sharingType='borrowing' data={this.state.requestingBorrowings} />
 
         <AtDivider content='只买书 v1.4.1' fontColor='#696969' />
 
