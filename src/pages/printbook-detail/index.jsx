@@ -22,6 +22,7 @@ export default class PrintBookDetail extends Component {
 
   state = {
     book: {},
+    relatedPrintBooks: [],
     isFetching: true,
     isError: false,
     mainButton: null,
@@ -38,8 +39,8 @@ export default class PrintBookDetail extends Component {
   }
 
   loadBook() {
-    let book_id = this.$router.params.id;
-    API.get(`/print_books/${book_id}`).then(res => {
+    let printBookId = this.$router.params.id;
+    API.get(`/print_books/${printBookId}`).then(res => {
       console.log(res.data)
       let printBook = res.data['print_book'];
       let mainButton = this.getMainButton(printBook);
@@ -48,6 +49,17 @@ export default class PrintBookDetail extends Component {
         isFetching: false,
         isError: false,
         mainButton: mainButton
+      });
+
+      let bookId = printBook.book_id;
+      API.get('/print_books', {property: 'shared', book_id: bookId}).then(result => {
+        console.log(result.data)
+        let printBooks = result.data['print_books'];
+        this.setState({
+          relatedPrintBooks: printBooks.filter(book => book.id != printBookId),
+        });
+      }).catch(error => {
+        console.error(error);
       });
     }).catch(err => {
       console.error(err);
@@ -177,7 +189,7 @@ export default class PrintBookDetail extends Component {
   };
 
   render() {
-    const { book, isFetching, isError, mainButton } = this.state;
+    const { book, relatedPrintBooks, isFetching, isError, mainButton } = this.state;
     return (
       <View>
         <AtMessage />
@@ -208,12 +220,15 @@ export default class PrintBookDetail extends Component {
                 </View>
               </View>
             )}
+
+            { relatedPrintBooks.length > 0 && (
             <View className='related-books'>
-              <View className='related-books__title'>相关图书</View>
+              <View className='related-books__title'>相关共享书</View>
               <View className='related-books__content'>
-                <HorizonList data={book.related_books} sideSpace={32} />
+                <HorizonList data={relatedPrintBooks} sideSpace={32} />
               </View>
             </View>
+            )}
           </Block>
         )}
         {mainButton && mainButton.visible && (

@@ -23,6 +23,7 @@ export default class BookDetail extends Component {
   state = {
     book: {},
     ownedPrintBooks: [],
+    relatedPrintBooks: [],
     isFetching: true,
     isError: false,
     isFloatLayoutOpened: false,
@@ -47,6 +48,16 @@ export default class BookDetail extends Component {
         ownedPrintBooks: book.owned_print_books,
         isFetching: false,
         isError: false
+      });
+    }).catch(err => {
+      console.error(err);
+    });
+
+    API.get('/print_books', {property: 'shared', book_id: bookId}).then(res => {
+      console.log(res.data)
+      let printBooks = res.data['print_books'];
+      this.setState({
+        relatedPrintBooks: printBooks,
       });
     }).catch(err => {
       console.error(err);
@@ -98,7 +109,7 @@ export default class BookDetail extends Component {
   };
 
   render() {
-    const { book, isFetching, isError, ownedPrintBooks, isFloatLayoutOpened } = this.state;
+    const { book, isFetching, isError, ownedPrintBooks, relatedPrintBooks, isFloatLayoutOpened } = this.state;
     return (
       <View>
         {!isFetching && !isError && (
@@ -111,15 +122,18 @@ export default class BookDetail extends Component {
                 {book.summary}
               </View>
             </View>
+
+            { relatedPrintBooks.length > 0 && (
             <View className='related-books'>
-              <View className='related-books__title'>相关图书</View>
+              <View className='related-books__title'>相关共享书</View>
               <View className='related-books__content'>
-                <HorizonList data={book.related_books} sideSpace={32} />
+                <HorizonList data={relatedPrintBooks} sideSpace={32} />
               </View>
             </View>
+            )}
 
             { ownedPrintBooks.length <= 0 && (
-              <AtButton type='primary' onClick={this.onPopUp}>拥有此书</AtButton> 
+              <AtButton type='primary' onClick={this.onPopUp}>我有此书</AtButton> 
             )}
 
             <AtFloatLayout isOpened={isFloatLayoutOpened} title='添加图书' >
@@ -130,7 +144,7 @@ export default class BookDetail extends Component {
                 height={400}
                 placeholder='添加备注...'
               />
-              <AtButton type='primary' onClick={this.ownBook}>我有此书</AtButton> 
+              <AtButton type='primary' onClick={this.ownBook}>拥有此书</AtButton> 
             </AtFloatLayout>
           </Block>
         )}
