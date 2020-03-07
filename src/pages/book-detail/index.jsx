@@ -22,9 +22,9 @@ export default class BookDetail extends Component {
 
   state = {
     book: {},
+    ownedPrintBooks: [],
     isFetching: true,
     isError: false,
-    printBooksTotal: 0,
     isFloatLayoutOpened: false,
     book_description: ''
   };
@@ -40,24 +40,13 @@ export default class BookDetail extends Component {
   loadBook() {
     let bookId = this.$router.params.id
     API.get(`/books/${bookId}`).then(res => {
-      // console.log(res.data)
+      console.log(res.data)
       let book = res.data['book'];
       this.setState({
         book: book,
+        ownedPrintBooks: book.owned_print_books,
         isFetching: false,
         isError: false
-      });
-    }).catch(err => {
-      console.error(err);
-    });
-
-    API.get('/print_books/search_by', 
-        { 'book_id': bookId, 'owner_id': user.userId }).then(res => {
-      // console.log(res.data)
-      let printBooks = res.data['print_books'];
-      this.setState({
-        printBooks: printBooks,
-        printBooksTotal: printBooks.length
       });
     }).catch(err => {
       console.error(err);
@@ -75,8 +64,10 @@ export default class BookDetail extends Component {
     API.post('/print_books', { 'book_id': this.state.book.id, 
       'description': this.state.book_description }).then(res => {
       // console.log(res)
+      let print_book = res.data['print_book'];
+      let ownedPrintBooks = [ print_book ];
       this.setState({
-        printBooksTotal: 1,
+        ownedPrintBooks: ownedPrintBooks,
         isFloatLayoutOpened: false
       });
     }).catch(err => {
@@ -89,25 +80,6 @@ export default class BookDetail extends Component {
       book_description: e.target.value
     })
   }
-
-  // async loadBook() {
-  //   try {
-  //     let book;
-  //     let book_id = this.$router.params.id
-  //     book = await API.get(`/print_books/${book_id}`);
-  //     console.log(book)
-  //     this.setState({
-  //       book,
-  //       isFetching: false,
-  //       isError: false
-  //     });
-  //   } catch (e) {
-  //     this.setState({
-  //       isFetching: false,
-  //       isError: true
-  //     });
-  //   }
-  // }
 
   onShareAppMessage (res) {
     if (res.from === 'button') {
@@ -126,7 +98,7 @@ export default class BookDetail extends Component {
   };
 
   render() {
-    const { book, isFetching, isError, printBooksTotal, isFloatLayoutOpened } = this.state;
+    const { book, isFetching, isError, ownedPrintBooks, isFloatLayoutOpened } = this.state;
     return (
       <View>
         {!isFetching && !isError && (
@@ -146,7 +118,7 @@ export default class BookDetail extends Component {
               </View>
             </View>
 
-            { printBooksTotal <= 0 && (
+            { ownedPrintBooks.length <= 0 && (
               <AtButton type='primary' onClick={this.onPopUp}>拥有此书</AtButton> 
             )}
 
