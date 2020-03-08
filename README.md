@@ -30,3 +30,4 @@ https://taro-ui.aotu.io/#/docs/introduction
 - [ ] 搜索图书
 - [X] 分享首页
 - [X] 删除藏书
+- [X] 移除借阅功能
